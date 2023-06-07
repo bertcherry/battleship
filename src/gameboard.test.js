@@ -14,4 +14,10 @@ test('Gameboard places ships at their coordinates by calling createShip', () => 
 test('receiveAttack records a miss', () => {
     testBoard.receiveAttack('b1');
     expect(testBoard.shotList.includes('b1')).toBeTruthy();
-})
+});
+
+test('receiveAttack records a hit', () => {
+    testBoard.receiveAttack('a1');
+    expect(testBoard.gameboard.a1.hits).toBe(1);
+    expect(testBoard.gameboard.a2.hits).toBe(1);
+});
