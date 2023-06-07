@@ -1,7 +1,7 @@
 import { createShip } from './ship';
 
 test('Ship factory creates an object that includes length, #/hits, and if sunk', () => {
-    expect(createShip(3)).toStrictEqual({length: 3, hits: 0, sunk: false});
+    expect(createShip(3).ship).toStrictEqual({length: 3, hits: 0, sunk: false});
 })
 
 test('hit function increases number of hits by one', () => {
