@@ -2,6 +2,7 @@ import { createShip } from './ship';
 
 const createGameboard = () => {
     let gameboard = {};
+    let shotList = [];
 
     const placeShip = (name, ...args) => {
         const coordinates = [...args];
@@ -12,7 +13,16 @@ const createGameboard = () => {
         });
     }
 
-    return { placeShip, gameboard };
+    function receiveAttack(coordinate) {
+        shotList.push(coordinate);
+        if (gameboard.coordinate === undefined) {
+            //report the shot as a miss
+        } else {
+            gameboard.coordinate.hit();
+        }
+    }
+
+    return { placeShip, receiveAttack, gameboard, shotList };
 }
 
 export { createGameboard };
