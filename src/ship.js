@@ -1,5 +1,6 @@
-const createShip = (length) => {
+const createShip = (name, length) => {
     const ship = {
+        name: name,
         length: length,
         hits: 0,
         sunk: false
