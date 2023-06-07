@@ -1,14 +1,10 @@
-import { createGameboard } from './gameboard';
+import { testBoard } from './gameboard';
 import { createShip } from './ship';
 
-
-let args = ['a1', 'a2', 'a3'];
-const testBoard = createGameboard();
-testBoard.placeShip('destroyer', ...args);
-const destroyer = createShip('destroyer', 3).ship;
+const destroyer = createShip('destroyer', 3);
 
 test('Gameboard places ships at their coordinates by calling createShip', () => {
-    expect(testBoard.gameboard.a2).toMatchObject(destroyer);
+    expect(JSON.stringify(testBoard.gameboard.a2)).toEqual(JSON.stringify(destroyer));
 });
 
 test('receiveAttack records a miss', () => {
@@ -18,6 +14,6 @@ test('receiveAttack records a miss', () => {
 
 test('receiveAttack records a hit', () => {
     testBoard.receiveAttack('a1');
-    expect(testBoard.gameboard.a1.hits).toBe(1);
-    expect(testBoard.gameboard.a2.hits).toBe(1);
+    expect(testBoard.gameboard.a1.ship.hits).toBe(1);
+    expect(testBoard.gameboard.a2.ship.hits).toBe(1);
 });
