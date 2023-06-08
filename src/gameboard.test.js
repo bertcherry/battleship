@@ -4,7 +4,7 @@ test('Gameboard places ships at their coordinates by calling createShip', () => 
     expect(testBoard.gameboard.a2).toEqual('destroyer');
 });
 
-test.skip('receiveAttack records a miss', () => {
+test('receiveAttack records a miss', () => {
     testBoard.receiveAttack('b1');
     expect(testBoard.shotList.includes('b1')).toBeTruthy();
 });
