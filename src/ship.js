@@ -6,11 +6,11 @@ const createShip = (name, length) => {
         sunk: false
     };
 
-    function isSunk() {
+    const isSunk = () => {
         ship.sunk = true;
     }
 
-    function hit() {
+    const hit = () => {
         ship.hits = ship.hits + 1;
         if (ship.hits === ship.length) {
             isSunk();
