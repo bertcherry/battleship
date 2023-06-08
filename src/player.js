@@ -1,13 +1,7 @@
-import { playerOneBoard, playerTwoBoard } from "./gameboard";
+//import inputCoord from DOM control
 
 const Player = (opponentBoard, isComputer) => {
-    const attack = (coordinate) => {
-        opponentBoard.receiveAttack(coordinate);
-    };
-
-    //refactor later to give a DOM interaction if isComputer is false
-    //then make this the only attack function, refactor test in gameboard.test
-    const randomAttack = () => {
+    const attack = () => {
         if (isComputer === true) {
             //generate a random number 1-7 twice, one translates to a-j, concatenate with the number
             //called with xOptions length so changes in board size happen in both dimensions
@@ -18,16 +12,15 @@ const Player = (opponentBoard, isComputer) => {
                 const yCoord = Math.floor(Math.random() * xOptions.length);
                 const randomCoord = xCoord + yCoord;
                 if (!opponentBoard.shotList.includes(randomCoord)) {
-                    return randomCoord;
+                    return opponentBoard.receiveAttack(randomCoord);
                 }
             }
+        } else {
+            //opponentBoard.receiveAttack(inputCoord())
         }
-    }
+    };
 
-    return { attack, randomAttack };
+    return { attack };
 }
 
-const playerOne = Player(playerTwoBoard, false);
-const playerTwo = Player(playerOneBoard, true);
-
-export { playerOne, playerTwo };
+export { Player };

@@ -62,7 +62,4 @@ const playerTwoArgs = {
     patrolBoat: ['a3', 'a2']
 }
 
-const playerOneBoard = createGameboard(playerOneArgs);
-const playerTwoBoard = createGameboard(playerTwoArgs);
-
-export { createGameboard, playerOneBoard, playerTwoBoard };
+export { createGameboard, playerOneArgs, playerTwoArgs };
