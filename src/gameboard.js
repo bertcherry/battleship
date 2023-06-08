@@ -45,6 +45,7 @@ const createGameboard = (playerArgs) => {
 }
 
 //carrier 5, battleship 4, destroyer 3, submarine 3, patrol boat 2
+//default arguments to later be replaced by DOM manipulation or random
 const playerOneArgs = {
     carrier: ['b1', 'b2', 'b3', 'b4', 'b5'],
     battleship: ['c2', 'c3', 'c4', 'c5'],
@@ -61,8 +62,7 @@ const playerTwoArgs = {
     patrolBoat: ['a3', 'a2']
 }
 
-const testBoard = createGameboard(playerOneArgs);
-const testBoard2 = createGameboard(playerTwoArgs);
+const playerOneBoard = createGameboard(playerOneArgs);
+const playerTwoBoard = createGameboard(playerTwoArgs);
 
-
-export { createGameboard, testBoard, testBoard2 };
+export { createGameboard, playerOneBoard, playerTwoBoard };
