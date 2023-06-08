@@ -1,5 +1,5 @@
 import { playerOneBoard, playerTwoBoard } from './gameboard';
-import { playerOne } from './player';
+import { playerOne, playerTwo } from './player';
 
 test('Gameboard places ships at their coordinates by calling createShip', () => {
     expect(playerOneBoard.gameboard.a2).toEqual('destroyer');
@@ -27,3 +27,10 @@ test('playerOne records hits on playerTwoBoard', () => {
     playerOne.attack('b1');
     expect(playerTwoBoard.shotList.includes('b1')).toBeTruthy();
 });
+
+test('playerTwo (computer) does not attack the same place twice', () => {
+    for (let i = 0; i < 40; i++) {
+        playerTwo.attack(playerTwo.randomAttack());     
+    };
+    expect((new Set(playerOneBoard.shotList)).size !== playerOneBoard.shotList.length).toBeTruthy();
+})
