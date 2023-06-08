@@ -5,6 +5,8 @@ const Player = (opponentBoard, isComputer) => {
         opponentBoard.receiveAttack(coordinate);
     };
 
+    //refactor later to give a DOM interaction if isComputer is false
+    //then make this the only attack function, refactor test in gameboard.test
     const randomAttack = () => {
         if (isComputer === true) {
             //generate a random number 1-7 twice, one translates to a-j, concatenate with the number
