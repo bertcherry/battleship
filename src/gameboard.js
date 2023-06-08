@@ -2,27 +2,35 @@ import { createShip } from './ship';
 
 const createGameboard = () => {
     let gameboard = {};
+    let gameboardShips = [];
     let shotList = [];
 
     const placeShip = (name, ...args) => {
         const coordinates = [...args];
         const length = coordinates.length;
-        const newShip = createShip(name, length).ship;
         coordinates.forEach(coordinate => {
-            gameboard[coordinate] = newShip;
+            gameboard[coordinate] = name;
         });
+        return createShip(name, length);
     }
+
+    let args = ['a1', 'a2', 'a3'];
+    const destroyer = placeShip('destroyer', ...args);
+    gameboardShips.push(destroyer);
 
     function receiveAttack(coordinate) {
         shotList.push(coordinate);
-        if (gameboard.coordinate === undefined) {
+        if (gameboard[coordinate] === undefined) {
             //report the shot as a miss
         } else {
-            gameboard.coordinate.hit();
+            const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
+            hitShip.hit();
         }
     }
 
-    return { placeShip, receiveAttack, gameboard, shotList };
+    return { placeShip, receiveAttack, gameboard, gameboardShips, shotList, destroyer };
 }
 
-export { createGameboard };
+const testBoard = createGameboard();
+
+export { createGameboard, testBoard };
