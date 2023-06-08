@@ -32,5 +32,5 @@ test('playerTwo (computer) does not attack the same place twice', () => {
     for (let i = 0; i < 40; i++) {
         playerTwo.attack(playerTwo.randomAttack());     
     };
-    expect((new Set(playerOneBoard.shotList)).size !== playerOneBoard.shotList.length).toBeTruthy();
+    expect((new Set(playerOneBoard.shotList)).size === playerOneBoard.shotList.length).toBeTruthy();
 })
