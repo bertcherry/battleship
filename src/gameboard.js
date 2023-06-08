@@ -18,6 +18,14 @@ const createGameboard = () => {
     const destroyer = placeShip('destroyer', ...args);
     gameboardShips.push(destroyer);
 
+    function allSunk() {
+        if (gameboardShips.every(item => item.ship.sunk === true)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function receiveAttack(coordinate) {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
@@ -25,11 +33,12 @@ const createGameboard = () => {
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
+            allSunk();
             //report the shot as a hit on hitShip name
         }
     }
 
-    return { placeShip, receiveAttack, gameboard, gameboardShips, shotList, destroyer };
+    return { placeShip, receiveAttack, allSunk, gameboard, gameboardShips, shotList, destroyer };
 }
 
 const testBoard = createGameboard();
