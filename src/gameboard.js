@@ -25,6 +25,7 @@ const createGameboard = () => {
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
+            //report the shot as a hit on hitShip name
         }
     }
 
