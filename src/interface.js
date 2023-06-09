@@ -27,7 +27,8 @@ function populateBoard (player, selfBoard, enemyBoard) {
     markAttacks('enemy', enemyBoard);
 
     function handleAttack(e) {
-        player.attack(e.currentTarget.id);
+        const cellId = 'enemy-' + e.currentTarget.id;
+        player.attack(cellId);
     }
 
     //add listeners to enemyBoard to call the player's attack function
