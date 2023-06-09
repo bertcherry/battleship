@@ -1,4 +1,4 @@
-import { testGame } from './index,js';
+import { testGame } from './index.js';
 
 test('Gameboard places ships at their coordinates by calling createShip', () => {
     expect(testGame.playerOneBoard.gameboard.a2).toEqual('destroyer');
