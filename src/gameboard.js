@@ -1,4 +1,4 @@
-import { createShip } from './ship';
+import { createShip } from './ship.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -37,7 +37,8 @@ const createGameboard = (playerArgs) => {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
             allSunk();
-            //report the shot as a hit on hitShip name
+            //report the shot as a hit
+            //if it sunk the ship, report that they sunk hitShip.name
         }
     }
 

@@ -1,4 +1,4 @@
-import { testGame } from './index';
+import { testGame } from './index,js';
 
 test('Gameboard places ships at their coordinates by calling createShip', () => {
     expect(testGame.playerOneBoard.gameboard.a2).toEqual('destroyer');
@@ -22,7 +22,6 @@ test.skip('reports if all ships are sunk', () => {
     expect(testGame.playerOneBoard.allSunk()).toBeTruthy();
 });
 
-//Skipped while working on receive attack
 test('playerOne records hits on playerTwoBoard', () => {
     testGame.playerOne.attack('b1');
     expect(testGame.playerTwoBoard.shotList.includes('b1')).toBeTruthy();

@@ -1,6 +1,6 @@
 //when it is playerX's turn, populate board with left side playerXBoard (non-interactable), self-a1 etc for display hook
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
-function populateBoard (player, selfBoard, enemyBoard) {
+function populateBoard (selfBoard, enemyBoard) {
     //reset the board - all children of #self-cells and #enemy-cells remove all classes
 
     //for cell properties in gameboard object - if they exist (have designated ship), give matching id on selfBoard class has-ship
@@ -28,12 +28,12 @@ function populateBoard (player, selfBoard, enemyBoard) {
 
     function handleAttack(e) {
         const cellId = 'enemy-' + e.currentTarget.id;
-        player.attack(cellId);
+        attack(cellId);
     }
 
     //add listeners to enemyBoard to call the player's attack function
     document.getElementById('enemy-cells').children.forEach(cell => {
-        cell.addEventListener('click', handleAttack)
+        cell.addEventListener('click', handleAttack);
     });
 }
 
