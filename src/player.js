@@ -30,7 +30,7 @@ const Player = (selfBoard, enemyBoard, isComputer) => {
         }
     };
 
-    return { attack, controlTurn };
+    return { attack, controlTurn, generateAttack };
 }
 
 

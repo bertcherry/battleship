@@ -27,10 +27,9 @@ test('playerOne records hits on playerTwoBoard', () => {
     expect(testGame.playerTwoBoard.shotList.includes('b1')).toBeTruthy();
 });
 
-//Skipped while working on receive attack
-test.skip('playerTwo (computer) does not attack the same place twice', () => {
+test('playerTwo (computer) does not attack the same place twice', () => {
     for (let i = 0; i < 40; i++) {
-        testGame.playerTwo.attack();     
+        testGame.playerTwo.attack(testGame.playerTwo.generateAttack());     
     };
     expect((new Set(testGame.playerOneBoard.shotList)).size === testGame.playerOneBoard.shotList.length).toBeTruthy();
-})
+});
