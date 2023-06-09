@@ -4,14 +4,12 @@ test('Gameboard places ships at their coordinates by calling createShip', () => 
     expect(playGame().playerOneBoard.gameboard.a2).toEqual('destroyer');
 });
 
-//Skipped after refactoring test board to integrate DOM
-test.skip('receiveAttack records a miss', () => {
+test('receiveAttack records a miss', () => {
     playGame().playerOneBoard.receiveAttack('b1');
     expect(playGame().playerOneBoard.shotList.includes('b1')).toBeTruthy();
 });
 
-//Skipped after refactoring test board to integrate DOM
-test.skip('receiveAttack records a hit', () => {
+test('receiveAttack records a hit', () => {
     playGame().playerOneBoard.receiveAttack('a1');
     expect(playGame().playerOneBoard.destroyer.ship.hits).toBe(1);
 });
@@ -24,8 +22,7 @@ test.skip('reports if all ships are sunk', () => {
     expect(playGame().playerOneBoard.allSunk()).toBeTruthy();
 });
 
-//Skipped after refactoring test board to integrate DOM
-test.skip('playerOne records hits on playerTwoBoard', () => {
+test('playerOne records hits on playerTwoBoard', () => {
     playGame().playerOne.attack('b1');
     expect(playGame().playerTwoBoard.shotList.includes('b1')).toBeTruthy();
 });
