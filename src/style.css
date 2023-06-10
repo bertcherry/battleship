@@ -6,10 +6,19 @@
 
 body, html {
     height: 100vh;
+    background-color: var(--bg);
+}
+
+:root {
+    --bg: #000000;
+    --accent: #1df900;
+    --empty: #686868;
+    --ship: #108e00;
 }
 
 h2 {
     text-align: center;
+    color: var(--accent);
 }
 
 #gameboards {
@@ -27,4 +36,14 @@ h2 {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     aspect-ratio: 1 / 1;
+    border: solid 3px var(--accent);
+}
+
+.board-cells > div {
+    background-color: var(--empty);
+    border: solid 1px var(--accent);
+}
+
+.board-cells > .has-ship {
+    background-color: var(--ship);
 }
