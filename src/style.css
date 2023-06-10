@@ -1,0 +1,33 @@
+*, *:before, *:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100vh;
+}
+
+h2 {
+    text-align: center;
+}
+
+#gameboards {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.gameboard {
+    width: 40%;
+}
+
+.board-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.board-cells > div {
+    aspect-ratio: 1 / 1;
+}
