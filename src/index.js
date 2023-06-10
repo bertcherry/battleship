@@ -1,3 +1,4 @@
+import './style.css';
 import { Player } from './player.js';
 import { createGameboard, playerOneArgs, playerTwoArgs } from './gameboard.js';
 
