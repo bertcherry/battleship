@@ -47,3 +47,11 @@ h2 {
 .board-cells > .has-ship {
     background-color: var(--ship);
 }
+
+.hit {
+    background-image: url('./zap.svg');
+}
+
+.miss {
+    background-image: url('./circle.svg');
+}
