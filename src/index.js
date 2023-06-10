@@ -10,6 +10,7 @@ const playGame = () => {
     const playerTwo = Player(playerTwoBoard, playerOneBoard, true);
     for (let i = 0; i < 49; i++) {
         playerOne.controlTurn();
+        //need to await the result of the attack before moving on to the next step
         if (playerTwoBoard.allSunk()) {
             //end game
             break;
