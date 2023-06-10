@@ -52,14 +52,14 @@ const playerOneArgs = {
     battleship: ['c2', 'c3', 'c4', 'c5'],
     destroyer: ['a1', 'a2', 'a3'],
     submarine: ['f5', 'f6', 'f7'],
-    patrolBoat: ['j3', 'j2']
+    patrolBoat: ['g3', 'g2']
 }
 
 const playerTwoArgs = {
-    carrier: ['h1', 'h2', 'h3', 'h4', 'h5'],
+    carrier: ['f1', 'f2', 'f3', 'f4', 'f5'],
     battleship: ['e2', 'e3', 'e4', 'e5'],
     destroyer: ['b1', 'b2', 'b3'],
-    submarine: ['i5', 'i6', 'i7'],
+    submarine: ['b5', 'b6', 'b7'],
     patrolBoat: ['a3', 'a2']
 }
 
