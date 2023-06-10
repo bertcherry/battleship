@@ -26,8 +26,5 @@ h2 {
 .board-cells {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-}
-
-.board-cells > div {
     aspect-ratio: 1 / 1;
 }
