@@ -3,16 +3,6 @@ import { testGame } from './index.js';
 
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
 function populateBoard(selfBoard, enemyBoard) {
-    const enemyCells = document.getElementById('enemy-cells');
-    
-    const handleAttack = (e) => {
-        enemyBoard.receiveAttack(e.currentTarget.id.slice(6));
-        markAttacks('enemy', enemyBoard);
-        for (const cell of enemyCells.children) {
-            cell.removeEventListener('click', handleAttack);
-        }
-    }
-
     //reset board to show new player's ships, hits, misses
     function clearBoard(designation, board) {
         board.shotList.forEach(shot => {
@@ -21,13 +11,14 @@ function populateBoard(selfBoard, enemyBoard) {
         });
     }
 
-    clearBoard('self', selfBoard);
-    clearBoard('enemy', enemyBoard);
-
-    //for cell properties in gameboard object - if they exist (have designated ship), give matching id on selfBoard class has-ship
-    for (const cell in selfBoard.gameboard) {
-        const cellDiv = document.getElementById(`self-${cell}`);
-        cellDiv.classList.add('has-ship');
+    const enemyCells = document.getElementById('enemy-cells');
+    const handleAttack = (e) => {
+        enemyBoard.receiveAttack(e.currentTarget.id.slice(6));
+        console.log(e.currentTarget.id.slice(6));
+        markAttacks('enemy', enemyBoard);
+        for (const cell of enemyCells.children) {
+            cell.removeEventListener('click', handleAttack);
+        }
     }
 
     //to populate hits and misses on each gameboard side using input of self vs enemy board
@@ -54,17 +45,30 @@ function populateBoard(selfBoard, enemyBoard) {
         }  
     }
 
-    markAttacks('self', selfBoard);
-    markAttacks('enemy', enemyBoard);
+    function intializeBoard() {
+        
+        
+        clearBoard('self', selfBoard);
+        clearBoard('enemy', enemyBoard);
 
-    //add listeners to enemyBoard to call the player's attack function
-    for (const cell of enemyCells.children) {
-        if (!enemyBoard.shotList.includes(cell.id.slice(6))) {
-            cell.addEventListener('click', handleAttack);
+        //for cell properties in gameboard object - if they exist (have designated ship), give matching id on selfBoard class has-ship
+        for (const cell in selfBoard.gameboard) {
+            const cellDiv = document.getElementById(`self-${cell}`);
+            cellDiv.classList.add('has-ship');
+        }
+
+        markAttacks('self', selfBoard);
+        markAttacks('enemy', enemyBoard);
+        
+        //add listeners to enemyBoard to call the player's attack function
+        for (const cell of enemyCells.children) {
+            if (!enemyBoard.shotList.includes(cell.id.slice(6))) {
+                cell.addEventListener('click', handleAttack);
+            }
         }
     }
-
-    return { handleAttack, markAttacks }
+    
+    return { handleAttack, markAttacks, intializeBoard }
 }
 
 const modalContainer = document.getElementById('modal-container');

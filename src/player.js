@@ -2,6 +2,7 @@ import { populateBoard } from './interface.js';
 
 const Player = (name, selfBoard, enemyBoard, isComputer) => {
     const playerName = name;
+    const populatePlayerBoard = populateBoard(selfBoard, enemyBoard);
     const attack = (coordinate) => {
         enemyBoard.receiveAttack(coordinate);
     }
@@ -26,9 +27,9 @@ const Player = (name, selfBoard, enemyBoard, isComputer) => {
     const controlTurn = () => {
         if (isComputer === true) {
             attack(generateAttack());
-            populateBoard(enemyBoard, selfBoard).markAttacks('self', enemyBoard);
+            populatePlayerBoard.markAttacks('self', enemyBoard);
         } else {
-            populateBoard(selfBoard, enemyBoard);
+            populatePlayerBoard.intializeBoard();
         }
     };
 
