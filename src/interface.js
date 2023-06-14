@@ -89,4 +89,16 @@ function reportHit(coordinate) {
     modalContainer.style.display = 'block';
 }
 
-export { populateBoard, reportMiss, reportHit };
+function reportSunk(coordinate, shipName) {
+    let opponent;
+    if (testGame.playerTurn === 0) {
+        opponent = testGame.players.at(1);
+    } else {
+        opponent = testGame.players.at(0);
+    }
+    modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
+    modalBtn.textContent = 'Continue'
+    modalContainer.style.display = 'block';
+}
+
+export { populateBoard, reportMiss, reportHit, reportSunk };

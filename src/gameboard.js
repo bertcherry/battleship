@@ -1,6 +1,6 @@
 import { createShip } from './ship.js';
 import { testGame } from './index.js';
-import { reportHit, reportMiss } from './interface.js';
+import { reportHit, reportMiss, reportSunk } from './interface.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -23,12 +23,11 @@ const createGameboard = (playerArgs) => {
     const patrolBoat = placeShip('patrol boat', ...playerArgs.patrolBoat);
     gameboardShips.push(carrier, battleship, destroyer, submarine, patrolBoat);
 
-    const allSunk = (coordinate) => {
+    const allSunk = (coordinate, shipName) => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
             testGame.endGame();
         } else {
-            //reportSunk(coordinate);
-            testGame.gameController();
+            reportSunk(coordinate, shipName);
         }
     }
 
@@ -39,8 +38,8 @@ const createGameboard = (playerArgs) => {
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
-            if (hitShip.sunk === true) {
-                allSunk(coordinate);
+            if (hitShip.ship.sunk === true) {
+                allSunk(coordinate, hitShip.ship.name);
             } else {
                 reportHit(coordinate);
             }
