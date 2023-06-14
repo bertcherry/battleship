@@ -1,5 +1,6 @@
 import { createShip } from './ship.js';
 import { testGame } from './index.js';
+import { reportMiss } from './interface.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -33,7 +34,7 @@ const createGameboard = (playerArgs) => {
     const receiveAttack = (coordinate) => {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
-            //report the shot as a miss
+            reportMiss(coordinate);
             testGame.gameController();
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);

@@ -1,4 +1,7 @@
 //when it is playerX's turn, populate board with left side playerXBoard (non-interactable), self-a1 etc for display hook
+
+import { doc } from "prettier";
+
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
 function populateBoard(selfBoard, enemyBoard) {
     const enemyCells = document.getElementById('enemy-cells');
@@ -65,4 +68,19 @@ function populateBoard(selfBoard, enemyBoard) {
     return { handleAttack }
 }
 
-export { populateBoard };
+const modalContainer = document.getElementById('modal-container');
+const modalText = document.getElementById('modal-text');
+const modalBtn = document.getElementById('modal-btn');
+
+function hideModal() {
+    modalContainer.style.display = 'none';
+}
+modalBtn.addEventListener('click', hideModal);
+
+function reportMiss(coordinate) {
+    modalText.textContent = `That's a miss at ${coordinate}!`
+    modalBtn.textContent = 'Ah, Drat'
+    modalContainer.style.display = 'block';
+}
+
+export { populateBoard, reportMiss };
