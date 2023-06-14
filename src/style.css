@@ -11,6 +11,7 @@ body, html {
 
 :root {
     --bg: #000000;
+    --contrast: #ffffff;
     --accent: #1df900;
     --empty: #686868;
     --ship: rgba(16,142,0, .5);
@@ -59,4 +60,55 @@ h2 {
 
 .miss {
     background-image: url('./circle.svg');
+}
+
+#modal-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: rgba(0,0,0,.5);
+}
+
+#modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: clamp(100px, 20vh, 150px);
+    width: clamp(150px, 20vw, 250px);
+    padding: 10px;
+    border: solid 3px var(--accent);
+    color: var(--contrast);
+    background-color: var(--bg);
+}
+
+button {
+    appearance: none;
+    background-color: var(--bg);
+    padding: 5px 20px;
+    border: solid 2px var(--contrast);
+    color: var(--contrast);
+}
+
+button:hover {
+    border: solid 2px var(--accent);
+    color: var(--accent);
+}
+
+button:focus-visible {
+    outline: max(2px, 0.15em) solid var(--accent);
+    outline-offset: max(3px, 0.15em);
+}
+
+button:active {
+    transform: translate(2px, 3px);
 }
