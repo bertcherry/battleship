@@ -13,7 +13,8 @@ body, html {
     --bg: #000000;
     --accent: #1df900;
     --empty: #686868;
-    --ship: #108e00;
+    --ship: rgba(16,142,0, .5);
+    --sunk: rgba(255, 0, 0, .5);
 }
 
 h2 {
@@ -46,6 +47,10 @@ h2 {
 
 .board-cells > .has-ship {
     background-color: var(--ship);
+}
+
+.board-cells > .sunk-ship {
+    background-color: var(--sunk);
 }
 
 .hit {

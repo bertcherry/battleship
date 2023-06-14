@@ -38,10 +38,16 @@ function populateBoard(selfBoard, enemyBoard) {
                 if (board.gameboard.hasOwnProperty(shot)) {
                     //if the attack logged in the attack history matches a property name in the gameboard, mark with class hit
                     cellDiv.classList.add('hit');
+                    cellDiv.classList.add('has-ship');
+                    //if the matching name ship in gameboardShips is sunk, mark the cell as sunk
+                    const matchShip = board.gameboardShips.find(item => item.ship.name === board.gameboard[shot]);
+                    if (matchShip.ship.sunk === true) {
+                        cellDiv.classList.add('sunk-ship');
+                    }
                 } else {
                     //if the attack logged does not match a property name in the gameboard, mark with class miss
                     cellDiv.classList.add('miss');
-                }
+                } 
             }); 
         }  
     }
