@@ -1,4 +1,5 @@
 import { createShip } from './ship.js';
+import { testGame } from './index.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -21,19 +22,20 @@ const createGameboard = (playerArgs) => {
     const patrolBoat = placeShip('patrol boat', ...playerArgs.patrolBoat);
     gameboardShips.push(carrier, battleship, destroyer, submarine, patrolBoat);
 
-    function allSunk() {
+    const allSunk = () => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
             return true;
             //if true, end the game
         } else {
-            return false;
+            testGame.gameController();
         }
     }
 
-    function receiveAttack(coordinate) {
+    const receiveAttack = (coordinate) => {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
             //report the shot as a miss
+            testGame.gameController();
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();

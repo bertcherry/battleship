@@ -8,23 +8,22 @@ const playGame = () => {
     const playerTwoBoard = createGameboard(playerTwoArgs);
     const playerOne = Player(playerOneBoard, playerTwoBoard, false);
     const playerTwo = Player(playerTwoBoard, playerOneBoard, true);
-    for (let i = 0; i < 50; i++) {
-        playerOne.controlTurn();
-        //need to await the result of the attack before moving on to the next step
-        if (playerTwoBoard.allSunk()) {
-            //end game
-            break;
-        }
-        playerTwo.controlTurn();
-        if (playerOneBoard.allSunk()) {
-            //end game
-            break;
-        }
-    } 
+    const players = [ playerOne, playerTwo ];
+    let playerTurn = 0;
+    players.at(playerTurn).controlTurn();
 
-    return { playerOneBoard, playerTwoBoard, playerOne, playerTwo };
+    const gameController = () => {
+        if (playerTurn === 0) {
+            playerTurn = 1;
+        } else {
+            playerTurn = 0;
+        }
+        players.at(playerTurn).controlTurn();
+    }
+
+    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo };
 }
 
 const testGame = playGame();
 
-export { testGame };
+export { testGame, playGame };
