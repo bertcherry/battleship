@@ -78,9 +78,15 @@ function hideModal() {
 }
 
 function reportMiss(coordinate) {
-    modalText.textContent = `That's a miss at ${coordinate}!`
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
 }
 
-export { populateBoard, reportMiss };
+function reportHit(coordinate) {
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
+    modalBtn.textContent = 'Continue'
+    modalContainer.style.display = 'block';
+}
+
+export { populateBoard, reportMiss, reportHit };

@@ -6,8 +6,8 @@ const playGame = () => {
     //reverse initiation of players and boards once ship placement is in control of players
     const playerOneBoard = createGameboard(playerOneArgs);
     const playerTwoBoard = createGameboard(playerTwoArgs);
-    const playerOne = Player('player one', playerOneBoard, playerTwoBoard, false);
-    const playerTwo = Player('player two', playerTwoBoard, playerOneBoard, true);
+    const playerOne = Player('Player One', playerOneBoard, playerTwoBoard, false);
+    const playerTwo = Player('Player Two', playerTwoBoard, playerOneBoard, true);
     const players = [ playerOne, playerTwo ];
     let playerTurn = 0;
     players.at(playerTurn).controlTurn();
@@ -25,7 +25,7 @@ const playGame = () => {
         alert(`${players.at(playerTurn).playerName} has won!`)
     }
 
-    return { gameController, endGame, playerOneBoard, playerTwoBoard, playerOne, playerTwo };
+    return { gameController, endGame, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
 }
 
 const testGame = playGame();
