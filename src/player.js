@@ -32,13 +32,7 @@ const Player = (name, selfBoard, enemyBoard, isComputer) => {
         }
     };
 
-    const handleAttack = (e) => {
-        console.log(e.currentTarget.id.slice(6));
-        const coordinate = e.currentTarget.id.slice(6);
-        return coordinate;
-    }
-
-    return { playerName, attack, controlTurn, generateAttack, handleAttack };
+    return { playerName, attack, controlTurn, generateAttack };
 }
 
 
