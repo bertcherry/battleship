@@ -26,6 +26,7 @@ const Player = (name, selfBoard, enemyBoard, isComputer) => {
     const controlTurn = () => {
         if (isComputer === true) {
             attack(generateAttack());
+            populateBoard(enemyBoard, selfBoard).markAttacks('self', enemyBoard);
         } else {
             populateBoard(selfBoard, enemyBoard);
         }

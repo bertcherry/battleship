@@ -35,7 +35,6 @@ const createGameboard = (playerArgs) => {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
             reportMiss(coordinate);
-            testGame.gameController();
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
