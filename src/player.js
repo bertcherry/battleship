@@ -1,6 +1,7 @@
 import { populateBoard } from './interface.js';
 
-const Player = (selfBoard, enemyBoard, isComputer) => {
+const Player = (name, selfBoard, enemyBoard, isComputer) => {
+    const playerName = name;
     const attack = (coordinate) => {
         enemyBoard.receiveAttack(coordinate);
     }
@@ -36,7 +37,7 @@ const Player = (selfBoard, enemyBoard, isComputer) => {
         return coordinate;
     }
 
-    return { attack, controlTurn, generateAttack, handleAttack };
+    return { playerName, attack, controlTurn, generateAttack, handleAttack };
 }
 
 

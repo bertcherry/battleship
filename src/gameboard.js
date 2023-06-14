@@ -24,8 +24,7 @@ const createGameboard = (playerArgs) => {
 
     const allSunk = () => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
-            return true;
-            //if true, end the game
+            testGame.endGame();
         } else {
             testGame.gameController();
         }
