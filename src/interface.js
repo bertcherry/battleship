@@ -70,7 +70,7 @@ function populateBoard(selfBoard, enemyBoard) {
     return { handleAttack, markAttacks, intializeBoard }
 }
 
-function modalAction() {
+function buildGameModal() {
     const modalContainer = document.getElementById('modal-container');
     const modalText = document.getElementById('modal-text');
     const modalBtn = document.getElementById('modal-btn');
@@ -116,4 +116,6 @@ function modalAction() {
     return { reportMiss, reportHit, reportSunk, reportEnd }
 }
 
-export { populateBoard, modalAction };
+
+
+export { populateBoard, buildGameModal };

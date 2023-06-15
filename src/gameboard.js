@@ -24,23 +24,23 @@ const createGameboard = (playerArgs) => {
 
     const allSunk = (coordinate, shipName) => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
-            testGame.testModal.reportEnd(coordinate, shipName);
+            testGame.gameModal.reportEnd(coordinate, shipName);
         } else {
-            testGame.testModal.reportSunk(coordinate, shipName);
+            testGame.gameModal.reportSunk(coordinate, shipName);
         }
     }
 
     const receiveAttack = (coordinate) => {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
-            testGame.testModal.reportMiss(coordinate);
+            testGame.gameModal.reportMiss(coordinate);
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
             if (hitShip.ship.sunk === true) {
                 allSunk(coordinate, hitShip.ship.name);
             } else {
-                testGame.testModal.reportHit(coordinate);
+                testGame.gameModal.reportHit(coordinate);
             }
         }
     }
