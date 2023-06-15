@@ -70,46 +70,50 @@ function populateBoard(selfBoard, enemyBoard) {
     return { handleAttack, markAttacks, intializeBoard }
 }
 
-const modalContainer = document.getElementById('modal-container');
-const modalText = document.getElementById('modal-text');
-const modalBtn = document.getElementById('modal-btn');
-modalBtn.addEventListener('click', hideModal);
-modalBtn.addEventListener('click', () => testGame.gameController());
+function modalAction() {
+    const modalContainer = document.getElementById('modal-container');
+    const modalText = document.getElementById('modal-text');
+    const modalBtn = document.getElementById('modal-btn');
+    modalBtn.addEventListener('click', hideModal);
+    modalBtn.addEventListener('click', () => testGame.gameController());
 
-function hideModal() {
-    modalContainer.style.display = 'none';
-}
-
-function reportMiss(coordinate) {
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
-    modalBtn.textContent = 'Continue'
-    modalContainer.style.display = 'block';
-}
-
-function reportHit(coordinate) {
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
-    modalBtn.textContent = 'Continue'
-    modalContainer.style.display = 'block';
-}
-
-function reportSunk(coordinate, shipName) {
-    let opponent;
-    if (testGame.playerTurn === 0) {
-        opponent = testGame.players.at(1);
-    } else {
-        opponent = testGame.players.at(0);
+    function hideModal() {
+        modalContainer.style.display = 'none';
     }
-    modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
-    modalBtn.textContent = 'Continue'
-    modalContainer.style.display = 'block';
+
+    function reportMiss(coordinate) {
+        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
+        modalBtn.textContent = 'Continue'
+        modalContainer.style.display = 'block';
+    }
+
+    function reportHit(coordinate) {
+        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
+        modalBtn.textContent = 'Continue'
+        modalContainer.style.display = 'block';
+    }
+
+    function reportSunk(coordinate, shipName) {
+        let opponent;
+        if (testGame.playerTurn === 0) {
+            opponent = testGame.players.at(1);
+        } else {
+            opponent = testGame.players.at(0);
+        }
+        modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
+        modalBtn.textContent = 'Continue'
+        modalContainer.style.display = 'block';
+    }
+
+    function reportEnd(coordinate, shipName) {
+        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
+        modalBtn.textContent = 'Play Again';
+        //Reset the game conditions
+        //modalBtn.addEventListener('click', playGame);
+        modalContainer.style.display = 'block';
+    }
+
+    return { reportMiss, reportHit, reportSunk, reportEnd }
 }
 
-function reportEnd(coordinate, shipName) {
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
-    modalBtn.textContent = 'Play Again';
-    //Reset the game conditions
-    //modalBtn.addEventListener('click', playGame);
-    modalContainer.style.display = 'block';
-}
-
-export { populateBoard, reportMiss, reportHit, reportSunk, reportEnd };
+export { populateBoard, modalAction };

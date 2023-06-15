@@ -1,6 +1,7 @@
 import './style.css';
 import { Player } from './player.js';
 import { createGameboard, playerOneArgs, playerTwoArgs } from './gameboard.js';
+import { modalAction } from './interface.js';
 
 const playGame = () => {
     //reverse initiation of players and boards once ship placement is in control of players
@@ -8,6 +9,7 @@ const playGame = () => {
     const playerTwoBoard = createGameboard(playerTwoArgs);
     const playerOne = Player('Player One', playerOneBoard, playerTwoBoard, false);
     const playerTwo = Player('Player Two', playerTwoBoard, playerOneBoard, true);
+    const testModal = modalAction();
     const players = [ playerOne, playerTwo ];
     let playerTurn = 0;
     players.at(playerTurn).controlTurn();
@@ -26,7 +28,7 @@ const playGame = () => {
         }
     }
 
-    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
+    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn, testModal };
 }
 
 const testGame = playGame();

@@ -1,5 +1,5 @@
 import { createShip } from './ship.js';
-import { reportEnd, reportHit, reportMiss, reportSunk } from './interface.js';
+import { testGame } from './index.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -24,23 +24,23 @@ const createGameboard = (playerArgs) => {
 
     const allSunk = (coordinate, shipName) => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
-            reportEnd(coordinate, shipName);
+            testGame.testModal.reportEnd(coordinate, shipName);
         } else {
-            reportSunk(coordinate, shipName);
+            testGame.testModal.reportSunk(coordinate, shipName);
         }
     }
 
     const receiveAttack = (coordinate) => {
         shotList.push(coordinate);
         if (gameboard[coordinate] === undefined) {
-            reportMiss(coordinate);
+            testGame.testModal.reportMiss(coordinate);
         } else {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
             if (hitShip.ship.sunk === true) {
                 allSunk(coordinate, hitShip.ship.name);
             } else {
-                reportHit(coordinate);
+                testGame.testModal.reportHit(coordinate);
             }
         }
     }
