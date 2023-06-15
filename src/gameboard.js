@@ -1,5 +1,4 @@
 import { createShip } from './ship.js';
-import { testGame } from './index.js';
 import { reportEnd, reportHit, reportMiss, reportSunk } from './interface.js';
 
 const createGameboard = (playerArgs) => {

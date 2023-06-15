@@ -26,11 +26,7 @@ const playGame = () => {
         }
     }
 
-    const endGame = () => {
-        alert(`${players.at(playerTurn).playerName} has won!`)
-    }
-
-    return { gameController, endGame, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
+    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
 }
 
 const testGame = playGame();

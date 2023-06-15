@@ -14,7 +14,6 @@ function populateBoard(selfBoard, enemyBoard) {
     const enemyCells = document.getElementById('enemy-cells');
     const handleAttack = (e) => {
         enemyBoard.receiveAttack(e.currentTarget.id.slice(6));
-        console.log(e.currentTarget.id.slice(6));
         markAttacks('enemy', enemyBoard);
         for (const cell of enemyCells.children) {
             cell.removeEventListener('click', handleAttack);
