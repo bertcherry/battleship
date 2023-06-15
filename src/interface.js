@@ -70,16 +70,18 @@ function populateBoard(selfBoard, enemyBoard) {
     return { handleAttack, markAttacks, intializeBoard }
 }
 
-function buildGameModal() {
-    const modalContainer = document.getElementById('modal-container');
-    const modalText = document.getElementById('modal-text');
-    const modalBtn = document.getElementById('modal-btn');
-    modalBtn.addEventListener('click', hideModal);
-    modalBtn.addEventListener('click', () => testGame.gameController());
+//Modal for game prompts
+const modalContainer = document.getElementById('modal-container');
+const modalText = document.getElementById('modal-text');
+const modalBtn = document.getElementById('modal-btn');
+function hideModal() {
+    modalContainer.style.display = 'none';
+}
+modalBtn.addEventListener('click', hideModal);
 
-    function hideModal() {
-        modalContainer.style.display = 'none';
-    }
+//Controls modal action once game has started
+function buildGameModal() { 
+    modalBtn.addEventListener('click', () => testGame.gameController());
 
     function reportMiss(coordinate) {
         modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
@@ -116,6 +118,66 @@ function buildGameModal() {
     return { reportMiss, reportHit, reportSunk, reportEnd }
 }
 
+//Controls initialization of game
+function buildSetupPrompts() {
+    //Prompt for game mode: vs computer or 2 player mode
+    let versus;
+    let currentPlayer;
+    const modal = document.getElementById('modal');
+    const modalBtnTwo = document.createElement('button');
+    const nameInput = document.createElement('input');
+    
+    function askGameMode() {
+        modalText.textContent = 'Welcome to battleship, a classic warfare strategy game. What mode do you want to play?'
+        modalBtn.textContent = 'vs. Computer'
+        modalBtnTwo.textContent = '2 Player';
+        modal.appendChild(modalBtnTwo);
+        modalContainer.style.display = 'block';
+        modalBtn.addEventListener('click', storeGameMode);
+    }
 
+    function storeGameMode(e) {
+        modalBtn.removeEventListener('click', storeGameMode);
+        let playerDisplay;
+        if (e.currentTarget.id === 'modal-btn') {
+            versus = false;
+            currentPlayer = testGame.playerOne;
+            playerDisplay = 'your';
+        } else {
+            versus = true;
+            currentPlayer = testGame.playerOne;
+            playerDisplay = `Player One's`;
+        }
+        modal.removeChild(modalBtn);
+        modal.removeChild(modalBtnTwo);
+        namePrompt(playerDisplay);
+    }
 
-export { populateBoard, buildGameModal };
+    //Prompt for player name for each human player
+    function namePrompt(player) {
+        modalText.textContent = `Enter ${player} name`
+        modalBtn.textContent = 'Submit'
+        modal.appendChild(nameInput);
+        modal.appendChild(modalBtn);
+        modalContainer.style.display = 'block';
+        modalBtn.addEventListener('click', storePlayerName);
+    }
+
+    function storePlayerName(e) {
+        modalBtn.removeEventListener('click', storePlayerName);
+        e.preventDefault();
+        currentPlayer.name = nameInput.value;
+        modal.removeChild(nameInput);
+    } 
+
+    //Prompt to place each ship in descending order of size. Ship length feeds into drag event loop
+
+    //Event listeners placed on self gameboard cells (display none on enemy board while this is happening)
+    //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
+    //Event listener terminates once a loop the length of the specified ship is dragged into, then dragout event sends placeShip to the player's board
+
+}
+
+//2 player pass screen prompt -- needs new modal for pass screen since event listeners are called on the standard one in gameModal
+
+export { populateBoard, buildGameModal, buildSetupPrompts };

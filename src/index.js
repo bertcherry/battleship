@@ -7,8 +7,8 @@ const playGame = () => {
     //reverse initiation of players and boards once ship placement is in control of players
     const playerOneBoard = createGameboard(playerOneArgs);
     const playerTwoBoard = createGameboard(playerTwoArgs);
-    const playerOne = Player('Player One', playerOneBoard, playerTwoBoard, false);
-    const playerTwo = Player('Player Two', playerTwoBoard, playerOneBoard, true);
+    const playerOne = Player(null, playerOneBoard, playerTwoBoard, false);
+    const playerTwo = Player(null, playerTwoBoard, playerOneBoard, true);
     const gameModal = buildGameModal();
     const players = [ playerOne, playerTwo ];
     let playerTurn = 0;
