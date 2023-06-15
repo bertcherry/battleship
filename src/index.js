@@ -13,12 +13,17 @@ const playGame = () => {
     players.at(playerTurn).controlTurn();
 
     const gameController = () => {
-        if (playerTurn === 0) {
-            playerTurn = 1;
+        if (playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
+            console.log('end');
+            return;
         } else {
-            playerTurn = 0;
+            if (playerTurn === 0) {
+                playerTurn = 1;
+            } else {
+                playerTurn = 0;
+            }
+            players.at(playerTurn).controlTurn();
         }
-        players.at(playerTurn).controlTurn();
     }
 
     const endGame = () => {

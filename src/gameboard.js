@@ -1,6 +1,6 @@
 import { createShip } from './ship.js';
 import { testGame } from './index.js';
-import { reportHit, reportMiss, reportSunk } from './interface.js';
+import { reportEnd, reportHit, reportMiss, reportSunk } from './interface.js';
 
 const createGameboard = (playerArgs) => {
     let gameboard = {};
@@ -25,7 +25,7 @@ const createGameboard = (playerArgs) => {
 
     const allSunk = (coordinate, shipName) => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
-            testGame.endGame();
+            reportEnd(coordinate, shipName);
         } else {
             reportSunk(coordinate, shipName);
         }

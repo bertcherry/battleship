@@ -75,7 +75,7 @@ const modalContainer = document.getElementById('modal-container');
 const modalText = document.getElementById('modal-text');
 const modalBtn = document.getElementById('modal-btn');
 modalBtn.addEventListener('click', hideModal);
-modalBtn.addEventListener('click', () => testGame.gameController())
+modalBtn.addEventListener('click', () => testGame.gameController());
 
 function hideModal() {
     modalContainer.style.display = 'none';
@@ -105,4 +105,12 @@ function reportSunk(coordinate, shipName) {
     modalContainer.style.display = 'block';
 }
 
-export { populateBoard, reportMiss, reportHit, reportSunk };
+function reportEnd(coordinate, shipName) {
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
+    modalBtn.textContent = 'Play Again';
+    //Reset the game conditions
+    //modalBtn.addEventListener('click', playGame);
+    modalContainer.style.display = 'block';
+}
+
+export { populateBoard, reportMiss, reportHit, reportSunk, reportEnd };
