@@ -174,19 +174,24 @@ function buildSetupPrompts() {
     //Prompt to place each ship in descending order of size. Ship length feeds into drag event loop
     function promptPlaceShips(currentPlayer) {
         let s = 0;
+        let ship;
+        let shipLength;
+        let shipName;
+        let shipIds;
         placeEach();
 
         function placeEach() {
-            const ship = Object.entries(currentPlayer.playerArgs).at(s).at(0);
-            const shipLength = ship.slice(-1);
-            let shipName = ship.substring(0,ship.length - 1);
+            ship = Object.entries(currentPlayer.playerArgs).at(s).at(0);
+            shipLength = ship.slice(-1);
+            shipName = ship.substring(0,ship.length - 1);
             modalText.textContent = `Place your ${shipName} by dragging and dropping on your board. The ${shipName} takes up ${shipLength} squares on the grid.`;
             modalBtn.textContent = 'Ready';
             modalContainer.style.display = 'block';
             modalBtn.addEventListener('click', dragPlacement);
 
             function dragPlacement() {
-                let shipIds = [];
+                shipIds = [];
+                console.log(shipIds);
                 let i = 0;
                 //Event listeners placed on self gameboard cells
                 const selfCells = document.getElementById('self-cells');
@@ -208,14 +213,19 @@ function buildSetupPrompts() {
                     const xIndex = parseInt(xOptions.indexOf(firstCellId.slice(0,1)));
                     const yCoord = parseInt(firstCellId.slice(1));
                     let nextCells = [];
-                    nextCells.push('self-' + xOptions.at(xIndex) + (yCoord - 1));
-                    nextCells.push('self-' + xOptions.at(xIndex) + (yCoord + 1));
+                    if (yCoord !== 0) {
+                        nextCells.push('self-' + xOptions.at(xIndex) + (yCoord - 1));
+                    }
+                    if (yCoord !== 6) {
+                        nextCells.push('self-' + xOptions.at(xIndex) + (yCoord + 1));
+                    }
                     if (xIndex !== 0) {
                         nextCells.push('self-' + xOptions.at(xIndex - 1) + yCoord);
                     }
                     if (xIndex !== 6) {
                         nextCells.push('self-' + xOptions.at(xIndex + 1) + yCoord);
                     }
+
                     for (const item of nextCells) {
                         if (!item.includes(undefined)) {
                             const cell = document.getElementById(item);
@@ -306,6 +316,22 @@ function buildSetupPrompts() {
                         const placedShip = currentPlayer.selfBoard.placeShip(`${shipName}`, shipIds);
                         currentPlayer.selfBoard.gameboardShips.push(placedShip);
                         console.log(currentPlayer.selfBoard.gameboardShips);
+                        s++;
+                        console.log(s);
+                        if (s <= Object.entries(currentPlayer.playerArgs).length) {
+                            placeEach();
+                        } else {
+                            if (currentPlayer === testGame.playerOne && versus === true) {
+                                currentPlayer = testGame.playerTwo;
+                                namePrompt(`Player Two's`);
+                            } else {
+                                const selfCells = document.getElementById('self-cells');
+                                for (const cell of selfCells.children) {
+                                    cell.setAttribute('draggable', 'false');
+                                }
+                                promptGameplay();
+                            }
+                        }
                         //increment s, if s is less than or equal to playerArgs.entries.length, placeEach again. 
                         //otherwise, remove draggable cells and start game/move to next player selection
                     }
@@ -317,6 +343,12 @@ function buildSetupPrompts() {
         }
     }
 
+    function promptGameplay() {
+        modalText.textContent = 'Make attacks by clicking on a cell on the enemy board. Good luck!'
+        modalBtn.textContent = 'Begin'
+        modalContainer.style.display = 'block';
+        modalBtn.addEventListener('click', testGame.gameController);
+    }
     
     //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
     //Event listener terminates once a loop the length of the specified ship is dragged into, then dragout event sends placeShip to the player's board
