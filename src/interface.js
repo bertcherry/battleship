@@ -190,8 +190,8 @@ function buildSetupPrompts() {
             modalBtn.addEventListener('click', dragPlacement);
 
             function dragPlacement() {
+                modalBtn.removeEventListener('click', dragPlacement);
                 shipIds = [];
-                console.log(shipIds);
                 let i = 0;
                 //Event listeners placed on self gameboard cells
                 const selfCells = document.getElementById('self-cells');
@@ -201,6 +201,9 @@ function buildSetupPrompts() {
                 }
 
                 function dragStart(e) {
+                    for (const cell of selfCells.children) {
+                        cell.removeEventListener('dragstart', dragStart);
+                    }
                     i++;
                     const firstCellId = e.currentTarget.id.slice(5);
                     shipIds.push(firstCellId);
@@ -232,12 +235,18 @@ function buildSetupPrompts() {
                             if (shipLength > 2) {
                                 cell.addEventListener('dragenter', dragContinue);
                             } else {
-                                cell.addEventListener('dragenter', dragFinish);
+                                cell.addEventListener('dragover', dragFinish);
+                                cell.addEventListener('drop', placeDragged);
                             }
                         }
                     }
 
                     function dragContinue(e) {
+                        for (const item of nextCells) {
+                            const cell = document.getElementById(item);
+                            cell.removeEventListener('dragenter', dragContinue);
+                        }
+                        e.currentTarget.removeEventListener('dragenter', dragContinue);
                         i++;
                         const currentCellId = e.currentTarget.id.slice(5);
                         e.currentTarget.classList.add('sunk-ship');
@@ -309,16 +318,16 @@ function buildSetupPrompts() {
                     }
 
                     function placeDragged(e) {
+                        e.currentTarget.removeEventListener('dragover', dragFinish);
+                        e.currentTarget.removeEventListener('drop', placeDragged);
                         e.preventDefault();
                         const lastCellId = e.currentTarget.id.slice(5);
                         shipIds.push(lastCellId);
                         //Add the ship to the selfBoard
                         const placedShip = currentPlayer.selfBoard.placeShip(`${shipName}`, shipIds);
                         currentPlayer.selfBoard.gameboardShips.push(placedShip);
-                        console.log(currentPlayer.selfBoard.gameboardShips);
                         s++;
-                        console.log(s);
-                        if (s <= Object.entries(currentPlayer.playerArgs).length) {
+                        if (s < Object.entries(currentPlayer.playerArgs).length) {
                             placeEach();
                         } else {
                             if (currentPlayer === testGame.playerOne && versus === true) {
