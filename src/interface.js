@@ -166,16 +166,162 @@ function buildSetupPrompts() {
     function storePlayerName(e) {
         modalBtn.removeEventListener('click', storePlayerName);
         e.preventDefault();
-        currentPlayer.name = nameInput.value;
+        currentPlayer.playerName = nameInput.value;
         modal.removeChild(nameInput);
+        promptPlaceShips(currentPlayer);
     } 
 
     //Prompt to place each ship in descending order of size. Ship length feeds into drag event loop
+    function promptPlaceShips(currentPlayer) {
+        let s = 0;
+        placeEach();
 
-    //Event listeners placed on self gameboard cells (display none on enemy board while this is happening)
+        function placeEach() {
+            const ship = Object.entries(currentPlayer.playerArgs).at(s).at(0);
+            const shipLength = ship.slice(-1);
+            let shipName = ship.substring(0,ship.length - 1);
+            modalText.textContent = `Place your ${shipName} by dragging and dropping on your board. The ${shipName} takes up ${shipLength} squares on the grid.`;
+            modalBtn.textContent = 'Ready';
+            modalContainer.style.display = 'block';
+            modalBtn.addEventListener('click', dragPlacement);
+
+            function dragPlacement() {
+                let shipIds = [];
+                let i = 0;
+                //Event listeners placed on self gameboard cells
+                const selfCells = document.getElementById('self-cells');
+                for (const cell of selfCells.children) {
+                    cell.setAttribute('draggable', 'true');
+                    cell.addEventListener('dragstart', dragStart);
+                }
+
+                function dragStart(e) {
+                    i++;
+                    const firstCellId = e.currentTarget.id.slice(5);
+                    shipIds.push(firstCellId);
+                    e.currentTarget.classList.add('sunk-ship');
+                    //Remove ghost image while dragged
+                    const img = new Image();
+                    e.dataTransfer.setDragImage(img, 0, 0);
+                    //Set next options for ship placement as perpendicular adjacent cells
+                    const xOptions = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+                    const xIndex = parseInt(xOptions.indexOf(firstCellId.slice(0,1)));
+                    const yCoord = parseInt(firstCellId.slice(1));
+                    let nextCells = [];
+                    nextCells.push('self-' + xOptions.at(xIndex) + (yCoord - 1));
+                    nextCells.push('self-' + xOptions.at(xIndex) + (yCoord + 1));
+                    if (xIndex !== 0) {
+                        nextCells.push('self-' + xOptions.at(xIndex - 1) + yCoord);
+                    }
+                    if (xIndex !== 6) {
+                        nextCells.push('self-' + xOptions.at(xIndex + 1) + yCoord);
+                    }
+                    for (const item of nextCells) {
+                        if (!item.includes(undefined)) {
+                            const cell = document.getElementById(item);
+                            if (shipLength > 2) {
+                                cell.addEventListener('dragenter', dragContinue);
+                            } else {
+                                cell.addEventListener('dragenter', dragFinish);
+                            }
+                        }
+                    }
+
+                    function dragContinue(e) {
+                        i++;
+                        const currentCellId = e.currentTarget.id.slice(5);
+                        e.currentTarget.classList.add('sunk-ship');
+                        shipIds.push(currentCellId);
+                        //compare the firstCellId with currentCellId
+                        //if their letter is the same, check to see if the number increments or decrements
+                        if (firstCellId.slice(0,1) === currentCellId.slice(0,1)) {
+                            //if it decrements, add a listener to the cell minus one
+                            if (firstCellId.slice(1) > currentCellId.slice(1)) {
+                                const nextCellY = parseInt(currentCellId.slice(1)) - 1;
+                                if (nextCellY < 0) {
+                                    //if that's a negative number, go to the interruptDrag function that reports ship won't fit there
+                                } else {
+                                    const nextCell = document.getElementById('self-' + currentCellId.slice(0,1) + nextCellY);
+                                    listenNextCell(nextCell);
+                                }
+                            } else {
+                                //if it increments, add a listener to the cell plus one
+                                const nextCellY = parseInt(currentCellId.slice(1)) + 1;
+                                if (nextCellY > 6) {
+                                    //if that's greater than 6, go to interruptDrag
+                                } else {
+                                    const nextCell = document.getElementById('self-' + currentCellId.slice(0,1) + nextCellY);
+                                    listenNextCell(nextCell);
+                                }
+                            }
+                        } else {
+                            //if their number is the same, check to see if the letter increments or decrements vs the xOptions array
+                            //if it decrements, add a listener to the cell minus a letter in the xOptions array
+                            if(xOptions.indexOf(firstCellId.slice(0,1)) > xOptions.indexOf(currentCellId.slice(0,1))) {
+                                const nextCellXIndex = xOptions.indexOf(currentCellId.slice(0,1)) - 1;
+                                if (nextCellXIndex < 0) {
+                                    //if the index of the letter is -1, go to interruptDrag
+                                } else {
+                                    const nextCell = document.getElementById('self-' + xOptions.at(nextCellXIndex) + currentCellId.slice(1));
+                                    listenNextCell(nextCell);
+                                }
+                            } else {
+                                //if it increments, add a listener to the cell plus 1 index in the xOptions array
+                                const nextCellXIndex = xOptions.indexOf(currentCellId.slice(0,1)) + 1;
+                                if (nextCellXIndex > 6) {
+                                    //if the index of the letter is >6, go to interruptDrag
+                                } else {
+                                    const nextCell = document.getElementById('self-' + xOptions.at(nextCellXIndex) + currentCellId.slice(1));
+                                    listenNextCell(nextCell);
+                                }
+                            }
+                        }
+
+                        function listenNextCell(nextCell) {
+                            if (i < (shipLength - 1)) {
+                                nextCell.addEventListener('dragenter', dragContinue);
+                            } else {
+                                nextCell.addEventListener('dragover', dragFinish);
+                                nextCell.addEventListener('drop', placeDragged);
+                            }
+                        }
+                    }
+
+                    function dragFinish(e) {
+                        //highlight this and other cells green to indicate the ship can be placed
+                        e.currentTarget.classList.add('has-ship');
+                        for (const item of shipIds) {
+                            const shipCell = document.getElementById('self-' + item);
+                            shipCell.classList.remove('sunk-ship');
+                            shipCell.classList.add('has-ship');
+                        }
+                        e.preventDefault();
+                    }
+
+                    function placeDragged(e) {
+                        e.preventDefault();
+                        const lastCellId = e.currentTarget.id.slice(5);
+                        shipIds.push(lastCellId);
+                        //Add the ship to the selfBoard
+                        const placedShip = currentPlayer.selfBoard.placeShip(`${shipName}`, shipIds);
+                        currentPlayer.selfBoard.gameboardShips.push(placedShip);
+                        console.log(currentPlayer.selfBoard.gameboardShips);
+                        //increment s, if s is less than or equal to playerArgs.entries.length, placeEach again. 
+                        //otherwise, remove draggable cells and start game/move to next player selection
+                    }
+                }
+
+                
+                
+            }
+        }
+    }
+
+    
     //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
     //Event listener terminates once a loop the length of the specified ship is dragged into, then dragout event sends placeShip to the player's board
 
+    return { askGameMode }
 }
 
 //2 player pass screen prompt -- needs new modal for pass screen since event listeners are called on the standard one in gameModal

@@ -18,7 +18,6 @@ const playGame = () => {
 
     const gameController = () => {
         if (playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
-            console.log('end');
             return;
         } else {
             if (playerTurn === 0) {

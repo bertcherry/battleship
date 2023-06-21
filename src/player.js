@@ -2,6 +2,16 @@ import { populateBoard } from './interface.js';
 
 const Player = (name, selfBoard, enemyBoard, isComputer) => {
     const playerName = name;
+    const playerArgs = {
+        carrier5: null,
+        battleship4: null,
+        destroyer3: null,
+        submarine3: null,
+        patrol2: null
+    }
+    selfBoard = selfBoard;
+    enemyBoard = enemyBoard;
+    
     const populatePlayerBoard = populateBoard(selfBoard, enemyBoard);
     const attack = (coordinate) => {
         enemyBoard.receiveAttack(coordinate);
@@ -33,7 +43,7 @@ const Player = (name, selfBoard, enemyBoard, isComputer) => {
         }
     };
 
-    return { playerName, attack, controlTurn, generateAttack };
+    return { playerName, playerArgs, selfBoard, enemyBoard, attack, controlTurn, generateAttack };
 }
 
 
