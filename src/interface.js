@@ -121,7 +121,6 @@ function buildGameModal() {
 //Controls initialization of game
 function buildSetupPrompts() {
     //Prompt for game mode: vs computer or 2 player mode
-    let versus;
     let currentPlayer;
     const modal = document.getElementById('modal');
     const modalBtnTwo = document.createElement('button');
@@ -134,18 +133,18 @@ function buildSetupPrompts() {
         modal.appendChild(modalBtnTwo);
         modalContainer.style.display = 'block';
         modalBtn.addEventListener('click', storeGameMode);
+        modalBtnTwo.addEventListener('click', storeGameMode);
     }
 
     function storeGameMode(e) {
         modalBtn.removeEventListener('click', storeGameMode);
+        modalBtnTwo.removeEventListener('click', storeGameMode);
         let playerDisplay;
+        currentPlayer = testGame.playerOne;
         if (e.currentTarget.id === 'modal-btn') {
-            versus = false;
-            currentPlayer = testGame.playerOne;
+            testGame.playerTwo.isComputer = true;
             playerDisplay = 'your';
         } else {
-            versus = true;
-            currentPlayer = testGame.playerOne;
             playerDisplay = `Player One's`;
         }
         modal.removeChild(modalBtn);
@@ -167,12 +166,13 @@ function buildSetupPrompts() {
         modalBtn.removeEventListener('click', storePlayerName);
         e.preventDefault();
         currentPlayer.playerName = nameInput.value;
+        nameInput.value = '';
         modal.removeChild(nameInput);
-        promptPlaceShips(currentPlayer);
+        promptPlaceShips();
     } 
 
     //Prompt to place each ship in descending order of size. Ship length feeds into drag event loop
-    function promptPlaceShips(currentPlayer) {
+    function promptPlaceShips() {
         let s = 0;
         let ship;
         let shipLength;
@@ -319,6 +319,10 @@ function buildSetupPrompts() {
 
                     function placeDragged(e) {
                         e.currentTarget.removeEventListener('dragover', dragFinish);
+                        for (const item of nextCells) {
+                            const cell = document.getElementById(item);
+                            cell.removeEventListener('dragover', dragFinish);
+                        }
                         e.currentTarget.removeEventListener('drop', placeDragged);
                         e.preventDefault();
                         const lastCellId = e.currentTarget.id.slice(5);
@@ -330,7 +334,10 @@ function buildSetupPrompts() {
                         if (s < Object.entries(currentPlayer.playerArgs).length) {
                             placeEach();
                         } else {
-                            if (currentPlayer === testGame.playerOne && versus === true) {
+                            if (currentPlayer === testGame.playerOne && testGame.playerTwo.isComputer === false) {
+                                for (const cell of selfCells.children) {
+                                    cell.classList.remove('has-ship');
+                                }
                                 currentPlayer = testGame.playerTwo;
                                 namePrompt(`Player Two's`);
                             } else {
@@ -345,9 +352,6 @@ function buildSetupPrompts() {
                         //otherwise, remove draggable cells and start game/move to next player selection
                     }
                 }
-
-                
-                
             }
         }
     }
@@ -356,6 +360,7 @@ function buildSetupPrompts() {
         modalText.textContent = 'Make attacks by clicking on a cell on the enemy board. Good luck!'
         modalBtn.textContent = 'Begin'
         modalContainer.style.display = 'block';
+        //this next line should build game modal instead
         modalBtn.addEventListener('click', testGame.gameController);
     }
     

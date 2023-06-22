@@ -7,14 +7,13 @@ const playGame = () => {
     //reverse initiation of players and boards once ship placement is in control of players
     const playerOneBoard = createGameboard(playerOneArgs);
     const playerTwoBoard = createGameboard(playerTwoArgs);
-    const playerOne = Player(null, playerOneBoard, playerTwoBoard, false);
-    const playerTwo = Player(null, playerTwoBoard, playerOneBoard, true);
+    const playerOne = Player(null, playerOneBoard, playerTwoBoard);
+    const playerTwo = Player(null, playerTwoBoard, playerOneBoard);
     const gameStart = buildSetupPrompts();
     gameStart.askGameMode();
-    const gameModal = buildGameModal();
     const players = [ playerOne, playerTwo ];
     let playerTurn = 0;
-    players.at(playerTurn).controlTurn();
+    //players.at(playerTurn).controlTurn();
 
     const gameController = () => {
         if (playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
@@ -29,7 +28,7 @@ const playGame = () => {
         }
     }
 
-    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn, gameModal };
+    return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
 }
 
 const testGame = playGame();
