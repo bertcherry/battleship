@@ -3,15 +3,15 @@ import { testGame } from './index.js';
 
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
 function populateBoard(selfBoard, enemyBoard) {
+    const enemyCells = document.getElementById('enemy-cells');
+    const selfCells = document.getElementById('self-cells');
     //reset board to show new player's ships, hits, misses
-    function clearBoard(designation, board) {
-        board.shotList.forEach(shot => {
-            const cellDiv = document.getElementById(`${designation}-${shot}`);
-            cellDiv.className = '';
-        });
+    function clearBoard(boardDisplay) {
+        for (const cell of boardDisplay.children) {
+            cell.className = '';
+        }
     }
 
-    const enemyCells = document.getElementById('enemy-cells');
     const handleAttack = (e) => {
         enemyBoard.receiveAttack(e.currentTarget.id.slice(6));
         markAttacks('enemy', enemyBoard);
@@ -45,10 +45,8 @@ function populateBoard(selfBoard, enemyBoard) {
     }
 
     function intializeBoard() {
-        
-        
-        clearBoard('self', selfBoard);
-        clearBoard('enemy', enemyBoard);
+        clearBoard(selfCells);
+        clearBoard(enemyCells);
 
         //for cell properties in gameboard object - if they exist (have designated ship), give matching id on selfBoard class has-ship
         for (const cell in selfBoard.gameboard) {
@@ -80,42 +78,44 @@ function hideModal() {
 modalBtn.addEventListener('click', hideModal);
 
 //Controls modal action once game has started
-function buildGameModal() { 
-    modalBtn.addEventListener('click', () => testGame.gameController());
+const controller = () => {
+    testGame.gameController();
+}
 
-    function reportMiss(coordinate) {
-        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
-        modalBtn.textContent = 'Continue'
-        modalContainer.style.display = 'block';
+function reportMiss(coordinate) {
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
+    modalBtn.textContent = 'Continue'
+    modalContainer.style.display = 'block';
+    modalBtn.addEventListener('click', controller);
+}
+
+function reportHit(coordinate) {
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
+    modalBtn.textContent = 'Continue'
+    modalContainer.style.display = 'block';
+    modalBtn.addEventListener('click', controller);
+}
+
+function reportSunk(coordinate, shipName) {
+    let opponent;
+    if (testGame.playerTurn === 0) {
+        opponent = testGame.players.at(1);
+    } else {
+        opponent = testGame.players.at(0);
     }
+    modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
+    modalBtn.textContent = 'Continue'
+    modalContainer.style.display = 'block';
+    modalBtn.addEventListener('click', controller);
+}
 
-    function reportHit(coordinate) {
-        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
-        modalBtn.textContent = 'Continue'
-        modalContainer.style.display = 'block';
-    }
-
-    function reportSunk(coordinate, shipName) {
-        let opponent;
-        if (testGame.playerTurn === 0) {
-            opponent = testGame.players.at(1);
-        } else {
-            opponent = testGame.players.at(0);
-        }
-        modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
-        modalBtn.textContent = 'Continue'
-        modalContainer.style.display = 'block';
-    }
-
-    function reportEnd(coordinate, shipName) {
-        modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
-        modalBtn.textContent = 'Play Again';
-        //Reset the game conditions
-        //modalBtn.addEventListener('click', playGame);
-        modalContainer.style.display = 'block';
-    }
-
-    return { reportMiss, reportHit, reportSunk, reportEnd }
+function reportEnd(coordinate, shipName) {
+    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
+    modalBtn.textContent = 'Play Again';
+    modalContainer.style.display = 'block';
+    modalBtn.removeEventListener('click', controller);
+    //Reset the game conditions
+    //modalBtn.addEventListener('click', playGame);
 }
 
 //Controls initialization of game
@@ -360,8 +360,8 @@ function buildSetupPrompts() {
         modalText.textContent = 'Make attacks by clicking on a cell on the enemy board. Good luck!'
         modalBtn.textContent = 'Begin'
         modalContainer.style.display = 'block';
-        //this next line should build game modal instead
-        modalBtn.addEventListener('click', testGame.gameController);
+        testGame.players.at(testGame.playerTurn).controlTurn();
+        //modalBtn.addEventListener('click', hideModal);
     }
     
     //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
@@ -372,4 +372,4 @@ function buildSetupPrompts() {
 
 //2 player pass screen prompt -- needs new modal for pass screen since event listeners are called on the standard one in gameModal
 
-export { populateBoard, buildGameModal, buildSetupPrompts };
+export { populateBoard, reportMiss, reportHit, reportSunk, reportEnd, buildSetupPrompts };

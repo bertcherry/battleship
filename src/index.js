@@ -10,11 +10,9 @@ const playGame = () => {
     const playerOne = Player(null, playerOneBoard, playerTwoBoard);
     const playerTwo = Player(null, playerTwoBoard, playerOneBoard);
     const gameStart = buildSetupPrompts();
-    gameStart.askGameMode();
     const players = [ playerOne, playerTwo ];
     let playerTurn = 0;
-    //players.at(playerTurn).controlTurn();
-
+    
     const gameController = () => {
         if (playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
             return;
@@ -24,9 +22,12 @@ const playGame = () => {
             } else {
                 playerTurn = 0;
             }
+            console.log('here');
             players.at(playerTurn).controlTurn();
         }
     }
+
+    gameStart.askGameMode();
 
     return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
 }
