@@ -2,16 +2,22 @@
 import { testGame } from './index.js';
 
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
-function populateBoard(selfBoard, enemyBoard) {
-    const enemyCells = document.getElementById('enemy-cells');
-    const selfCells = document.getElementById('self-cells');
-    //reset board to show new player's ships, hits, misses
-    function clearBoard(boardDisplay) {
-        for (const cell of boardDisplay.children) {
-            cell.className = '';
-        }
-    }
+const enemyCells = document.getElementById('enemy-cells');
+const selfCells = document.getElementById('self-cells');
 
+//reset board to show new player's ships, hits, misses
+function clearBoard() {
+    clearCells(enemyCells);
+    clearCells(selfCells);
+}
+
+function clearCells(boardDisplay) {
+    for (const cell of boardDisplay.children) {
+        cell.className = '';
+    }
+}
+
+function populateBoard(selfBoard, enemyBoard) {
     const handleAttack = (e) => {
         enemyBoard.receiveAttack(e.currentTarget.id.slice(6));
         markAttacks('enemy', enemyBoard);
@@ -45,8 +51,7 @@ function populateBoard(selfBoard, enemyBoard) {
     }
 
     function intializeBoard() {
-        clearBoard(selfCells);
-        clearBoard(enemyCells);
+        clearBoard();
 
         //for cell properties in gameboard object - if they exist (have designated ship), give matching id on selfBoard class has-ship
         for (const cell in selfBoard.gameboard) {
@@ -83,20 +88,23 @@ const controller = () => {
 }
 
 function reportMiss(coordinate) {
+    modalBtn.removeEventListener('click', controller);
     modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
-    modalBtn.addEventListener('click', controller);
+    modalBtn.addEventListener('click', displayPassDevice);
 }
 
 function reportHit(coordinate) {
+    modalBtn.removeEventListener('click', controller);
     modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
-    modalBtn.addEventListener('click', controller);
+    modalBtn.addEventListener('click', displayPassDevice);
 }
 
 function reportSunk(coordinate, shipName) {
+    modalBtn.removeEventListener('click', controller);
     let opponent;
     if (testGame.playerTurn === 0) {
         opponent = testGame.players.at(1);
@@ -106,16 +114,44 @@ function reportSunk(coordinate, shipName) {
     modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
-    modalBtn.addEventListener('click', controller);
+    modalBtn.addEventListener('click', displayPassDevice);
 }
 
 function reportEnd(coordinate, shipName) {
+    modalBtn.removeEventListener('click', controller);
     modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
     modalBtn.textContent = 'Play Again';
     modalContainer.style.display = 'block';
-    modalBtn.removeEventListener('click', controller);
     //Reset the game conditions
     //modalBtn.addEventListener('click', playGame);
+}
+
+function displayPassDevice() {
+    modalBtn.removeEventListener('click', displayPassDevice);
+    clearBoard();
+    if (testGame.playerTwo.isComputer === false) {
+        modalText.textContent = 'Pass the device';
+        modalBtn.textContent = 'Done';
+        modalContainer.style.display = 'block';
+        if (testGame.players.at(testGame.playerTurn).isFirstTurn === true) {
+            testGame.players.at(testGame.playerTurn).isFirstTurn = false;
+            modalBtn.addEventListener('click', promptGameplay);
+        } else {
+            modalBtn.addEventListener('click', controller);
+        }
+    } else {
+        controller();
+    }
+}
+
+function promptGameplay() {
+    modalBtn.removeEventListener('click', promptGameplay);
+    modalText.textContent = 'Make attacks by clicking on a cell on the enemy board. Good luck!'
+    modalBtn.textContent = 'Begin'
+    modalContainer.style.display = 'block';
+    modalBtn.addEventListener('click', controller);
+    //testGame.players.at(testGame.playerTurn).controlTurn();
+    //modalBtn.addEventListener('click', hideModal);
 }
 
 //Controls initialization of game
@@ -194,7 +230,6 @@ function buildSetupPrompts() {
                 shipIds = [];
                 let i = 0;
                 //Event listeners placed on self gameboard cells
-                const selfCells = document.getElementById('self-cells');
                 for (const cell of selfCells.children) {
                     cell.setAttribute('draggable', 'true');
                     cell.addEventListener('dragstart', dragStart);
@@ -341,11 +376,10 @@ function buildSetupPrompts() {
                                 currentPlayer = testGame.playerTwo;
                                 namePrompt(`Player Two's`);
                             } else {
-                                const selfCells = document.getElementById('self-cells');
                                 for (const cell of selfCells.children) {
                                     cell.setAttribute('draggable', 'false');
                                 }
-                                promptGameplay();
+                                displayPassDevice();
                             }
                         }
                         //increment s, if s is less than or equal to playerArgs.entries.length, placeEach again. 
@@ -356,13 +390,7 @@ function buildSetupPrompts() {
         }
     }
 
-    function promptGameplay() {
-        modalText.textContent = 'Make attacks by clicking on a cell on the enemy board. Good luck!'
-        modalBtn.textContent = 'Begin'
-        modalContainer.style.display = 'block';
-        testGame.players.at(testGame.playerTurn).controlTurn();
-        //modalBtn.addEventListener('click', hideModal);
-    }
+    
     
     //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
     //Event listener terminates once a loop the length of the specified ship is dragged into, then dragout event sends placeShip to the player's board

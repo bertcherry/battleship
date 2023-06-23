@@ -3,6 +3,7 @@ import { populateBoard } from './interface.js';
 const Player = (name, selfBoard, enemyBoard) => {
     const playerName = name;
     let isComputer = false;
+    let isFirstTurn = true;
     const playerArgs = {
         carrier5: null,
         battleship4: null,
@@ -44,7 +45,7 @@ const Player = (name, selfBoard, enemyBoard) => {
         }
     };
 
-    return { playerName, playerArgs, selfBoard, enemyBoard, isComputer, attack, controlTurn, generateAttack };
+    return { playerName, playerArgs, selfBoard, enemyBoard, isComputer, isFirstTurn, attack, controlTurn, generateAttack };
 }
 
 
