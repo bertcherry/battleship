@@ -1,5 +1,5 @@
 //when it is playerX's turn, populate board with left side playerXBoard (non-interactable), self-a1 etc for display hook
-import { testGame } from './index.js';
+import { game } from './index.js';
 
 //self- and enemy- are coded in so that the board is flexible to reclassing if playerTwo becomes a human
 const enemyCells = document.getElementById('enemy-cells');
@@ -84,12 +84,12 @@ modalBtn.addEventListener('click', hideModal);
 
 //Controls modal action once game has started
 const controller = () => {
-    testGame.gameController();
+    game.gameController();
 }
 
 function reportMiss(coordinate) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} missed at ${coordinate}.`
+    modalText.textContent = `${game.players.at(game.playerTurn).playerName} missed at ${coordinate}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -97,7 +97,7 @@ function reportMiss(coordinate) {
 
 function reportHit(coordinate) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit at ${coordinate}.`
+    modalText.textContent = `${game.players.at(game.playerTurn).playerName} hit at ${coordinate}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -106,12 +106,12 @@ function reportHit(coordinate) {
 function reportSunk(coordinate, shipName) {
     modalBtn.removeEventListener('click', controller);
     let opponent;
-    if (testGame.playerTurn === 0) {
-        opponent = testGame.players.at(1);
+    if (game.playerTurn === 0) {
+        opponent = game.players.at(1);
     } else {
-        opponent = testGame.players.at(0);
+        opponent = game.players.at(0);
     }
-    modalText.textContent = `With a hit at ${coordinate}, ${testGame.players.at(testGame.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
+    modalText.textContent = `With a hit at ${coordinate}, ${game.players.at(game.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -119,7 +119,7 @@ function reportSunk(coordinate, shipName) {
 
 function reportEnd(coordinate, shipName) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${testGame.players.at(testGame.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
+    modalText.textContent = `${game.players.at(game.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
     modalBtn.textContent = 'Play Again';
     modalContainer.style.display = 'block';
     //Reset the game conditions
@@ -129,12 +129,12 @@ function reportEnd(coordinate, shipName) {
 function displayPassDevice() {
     modalBtn.removeEventListener('click', displayPassDevice);
     clearBoard();
-    if (testGame.playerTwo.isComputer === false) {
+    if (game.playerTwo.isComputer === false) {
         modalText.textContent = 'Pass the device';
         modalBtn.textContent = 'Done';
         modalContainer.style.display = 'block';
-        if (testGame.players.at(testGame.playerTurn).isFirstTurn === true) {
-            testGame.players.at(testGame.playerTurn).isFirstTurn = false;
+        if (game.players.at(game.playerTurn).isFirstTurn === true) {
+            game.players.at(game.playerTurn).isFirstTurn = false;
             modalBtn.addEventListener('click', promptGameplay);
         } else {
             modalBtn.addEventListener('click', controller);
@@ -150,8 +150,6 @@ function promptGameplay() {
     modalBtn.textContent = 'Begin'
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', controller);
-    //testGame.players.at(testGame.playerTurn).controlTurn();
-    //modalBtn.addEventListener('click', hideModal);
 }
 
 //Controls initialization of game
@@ -176,9 +174,9 @@ function buildSetupPrompts() {
         modalBtn.removeEventListener('click', storeGameMode);
         modalBtnTwo.removeEventListener('click', storeGameMode);
         let playerDisplay;
-        currentPlayer = testGame.playerOne;
+        currentPlayer = game.playerOne;
         if (e.currentTarget.id === 'modal-btn') {
-            testGame.playerTwo.isComputer = true;
+            game.playerTwo.isComputer = true;
             playerDisplay = 'your';
         } else {
             playerDisplay = `Player One's`;
@@ -365,15 +363,17 @@ function buildSetupPrompts() {
                         //Add the ship to the selfBoard
                         const placedShip = currentPlayer.selfBoard.placeShip(`${shipName}`, shipIds);
                         currentPlayer.selfBoard.gameboardShips.push(placedShip);
+                        //increment s, if s is less than or equal to playerArgs.entries.length, placeEach again. 
+                        //otherwise, remove draggable cells and start game/move to next player selection
                         s++;
                         if (s < Object.entries(currentPlayer.playerArgs).length) {
                             placeEach();
                         } else {
-                            if (currentPlayer === testGame.playerOne && testGame.playerTwo.isComputer === false) {
+                            if (currentPlayer === game.playerOne && game.playerTwo.isComputer === false) {
                                 for (const cell of selfCells.children) {
                                     cell.classList.remove('has-ship');
                                 }
-                                currentPlayer = testGame.playerTwo;
+                                currentPlayer = game.playerTwo;
                                 namePrompt(`Player Two's`);
                             } else {
                                 for (const cell of selfCells.children) {
@@ -382,22 +382,13 @@ function buildSetupPrompts() {
                                 displayPassDevice();
                             }
                         }
-                        //increment s, if s is less than or equal to playerArgs.entries.length, placeEach again. 
-                        //otherwise, remove draggable cells and start game/move to next player selection
+                        
                     }
                 }
             }
         }
     }
-
-    
-    
-    //Drag and drop starting from dragenter to adjacent 9 cells, then once in another cell only to the cell in the next line
-    //Event listener terminates once a loop the length of the specified ship is dragged into, then dragout event sends placeShip to the player's board
-
     return { askGameMode }
 }
-
-//2 player pass screen prompt -- needs new modal for pass screen since event listeners are called on the standard one in gameModal
 
 export { populateBoard, reportMiss, reportHit, reportSunk, reportEnd, buildSetupPrompts };

@@ -1,12 +1,12 @@
 import './style.css';
 import { Player } from './player.js';
-import { createGameboard, playerOneArgs, playerTwoArgs } from './gameboard.js';
-import { buildGameModal, buildSetupPrompts } from './interface.js';
+import { createGameboard } from './gameboard.js';
+import { buildSetupPrompts } from './interface.js';
 
 const playGame = () => {
     //reverse initiation of players and boards once ship placement is in control of players
-    const playerOneBoard = createGameboard(playerOneArgs);
-    const playerTwoBoard = createGameboard(playerTwoArgs);
+    const playerOneBoard = createGameboard();
+    const playerTwoBoard = createGameboard();
     const playerOne = Player(null, playerOneBoard, playerTwoBoard);
     const playerTwo = Player(null, playerTwoBoard, playerOneBoard);
     const gameStart = buildSetupPrompts();
@@ -32,6 +32,6 @@ const playGame = () => {
     return { gameController, playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
 }
 
-const testGame = playGame();
+const game = playGame();
 
-export { testGame, playGame };
+export { game, playGame };

@@ -1,8 +1,7 @@
 import { createShip } from './ship.js';
-import { testGame } from './index.js';
 import { reportMiss, reportHit, reportSunk, reportEnd } from './interface.js';
 
-const createGameboard = (playerArgs) => {
+const createGameboard = () => {
     let gameboard = {};
     let gameboardShips = [];
     let shotList = [];
@@ -48,22 +47,13 @@ const createGameboard = (playerArgs) => {
     return { placeShip, receiveAttack, allSunk, gameboard, gameboardShips, shotList };
 }
 
-//carrier 5, battleship 4, destroyer 3, submarine 3, patrol boat 2
-//default arguments to later be replaced by DOM manipulation or random
-const playerOneArgs = {
-    carrier5: null,
-    battleship4: null,
-    destroyer3: null,
-    submarine3: null,
-    patrolBoat2: null
-}
+//Placeholder locations for computer ships
+//const playerTwoArgs = {
+    //carrier5: ['f1', 'f2', 'f3', 'f4', 'f5'],
+    //battleship4: ['e2', 'e3', 'e4', 'e5'],
+    //destroyer3: ['b1', 'b2', 'b3'],
+    //submarine3: ['b5', 'b6', 'b4'],
+    //patrolBoat2: ['a3', 'a2']
+//}
 
-const playerTwoArgs = {
-    carrier5: ['f1', 'f2', 'f3', 'f4', 'f5'],
-    battleship4: ['e2', 'e3', 'e4', 'e5'],
-    destroyer3: ['b1', 'b2', 'b3'],
-    submarine3: ['b5', 'b6', 'b4'],
-    patrolBoat2: ['a3', 'a2']
-}
-
-export { createGameboard, playerOneArgs, playerTwoArgs };
+export { createGameboard };
