@@ -210,7 +210,6 @@ function buildSetupPrompts() {
         modalBtn.removeEventListener('click', storePlayerName);
         e.preventDefault();
         currentPlayer.playerName = nameInput.value;
-        console.log(currentPlayer.playerName);
         nameInput.value = '';
         modal.removeChild(nameInput);
         promptPlaceShips();
