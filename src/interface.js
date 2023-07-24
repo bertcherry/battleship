@@ -340,11 +340,15 @@ function buildSetupPrompts() {
                         }
 
                         function listenNextCell(nextCell) {
-                            if (i < (shipLength - 1)) {
-                                nextCell.addEventListener('dragenter', dragContinue);
+                            if (currentPlayer.selfBoard.gameboard[nextCell.id.slice(5)] === undefined) {
+                                if (i < (shipLength - 1)) {
+                                    nextCell.addEventListener('dragenter', dragContinue);
+                                } else {
+                                    nextCell.addEventListener('dragover', dragFinish);
+                                    nextCell.addEventListener('drop', placeDragged);
+                                }
                             } else {
-                                nextCell.addEventListener('dragover', dragFinish);
-                                nextCell.addEventListener('drop', placeDragged);
+                                interruptDrag();
                             }
                         }
                     }
@@ -393,6 +397,14 @@ function buildSetupPrompts() {
                             }
                         }
                         
+                    }
+
+                    function interruptDrag() {
+                        for (const item of shipIds) {
+                            const shipCell = document.getElementById('self-' + item);
+                            shipCell.classList.remove('sunk-ship');
+                        }                        
+                        dragPlacement();
                     }
                 }
             }
