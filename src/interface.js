@@ -273,7 +273,7 @@ function buildSetupPrompts() {
                     }
 
                     for (const item of nextCells) {
-                        if (!item.includes(undefined)) {
+                        if (!item.includes(undefined) && currentPlayer.selfBoard.gameboard[item.slice(5)] === undefined) {
                             const cell = document.getElementById(item);
                             if (shipLength > 2) {
                                 cell.addEventListener('dragenter', dragContinue);
