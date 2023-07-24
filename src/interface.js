@@ -83,22 +83,37 @@ function hideModal() {
 modalBtn.addEventListener('click', hideModal);
 
 //Controls modal action once game has started
+let playerTurn = 1;
 const controller = () => {
-    game.gameController();
+    if (game.playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || game.playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
+        return;
+    } else {
+        if (playerTurn === 0) {
+            playerTurn = 1;
+        } else {
+            playerTurn = 0;
+        }
+        console.log(game.players.at(playerTurn).playerName);
+        game.players.at(playerTurn).controlTurn();
+    }
 }
 
 function reportMiss(coordinate) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${game.players.at(game.playerTurn).playerName} missed at ${coordinate}.`
-    modalBtn.textContent = 'Continue'
+    modalText.textContent = `${game.players.at(playerTurn).playerName} missed at ${coordinate}.`;
+    console.log(game.players.at(playerTurn).playerName);
+    console.log(playerTurn);
+    modalBtn.textContent = 'Continue';
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
 }
 
 function reportHit(coordinate) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${game.players.at(game.playerTurn).playerName} hit at ${coordinate}.`
-    modalBtn.textContent = 'Continue'
+    modalText.textContent = `${game.players.at(playerTurn).playerName} hit at ${coordinate}.`;
+    console.log(game.players.at(playerTurn).playerName);
+    console.log(playerTurn);
+    modalBtn.textContent = 'Continue';
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
 }
@@ -200,6 +215,7 @@ function buildSetupPrompts() {
         modalBtn.removeEventListener('click', storePlayerName);
         e.preventDefault();
         currentPlayer.playerName = nameInput.value;
+        console.log(currentPlayer.playerName);
         nameInput.value = '';
         modal.removeChild(nameInput);
         promptPlaceShips();
