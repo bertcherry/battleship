@@ -14,7 +14,7 @@ const playGame = () => {
 
     gameStart.askGameMode();
 
-    return { playerOneBoard, playerTwoBoard, playerOne, playerTwo, players, playerTurn };
+    return { playerOneBoard, playerTwoBoard, playerOne, playerTwo, players };
 }
 
 const game = playGame();
