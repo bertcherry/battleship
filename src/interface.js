@@ -93,7 +93,6 @@ const controller = () => {
         } else {
             playerTurn = 0;
         }
-        console.log(game.players.at(playerTurn).playerName);
         game.players.at(playerTurn).controlTurn();
     }
 }
@@ -101,8 +100,6 @@ const controller = () => {
 function reportMiss(coordinate) {
     modalBtn.removeEventListener('click', controller);
     modalText.textContent = `${game.players.at(playerTurn).playerName} missed at ${coordinate}.`;
-    console.log(game.players.at(playerTurn).playerName);
-    console.log(playerTurn);
     modalBtn.textContent = 'Continue';
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -111,8 +108,6 @@ function reportMiss(coordinate) {
 function reportHit(coordinate) {
     modalBtn.removeEventListener('click', controller);
     modalText.textContent = `${game.players.at(playerTurn).playerName} hit at ${coordinate}.`;
-    console.log(game.players.at(playerTurn).playerName);
-    console.log(playerTurn);
     modalBtn.textContent = 'Continue';
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -121,12 +116,12 @@ function reportHit(coordinate) {
 function reportSunk(coordinate, shipName) {
     modalBtn.removeEventListener('click', controller);
     let opponent;
-    if (game.playerTurn === 0) {
+    if (playerTurn === 0) {
         opponent = game.players.at(1);
     } else {
         opponent = game.players.at(0);
     }
-    modalText.textContent = `With a hit at ${coordinate}, ${game.players.at(game.playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
+    modalText.textContent = `With a hit at ${coordinate}, ${game.players.at(playerTurn).playerName} sunk ${opponent.playerName}'s ${shipName}.`
     modalBtn.textContent = 'Continue'
     modalContainer.style.display = 'block';
     modalBtn.addEventListener('click', displayPassDevice);
@@ -134,7 +129,7 @@ function reportSunk(coordinate, shipName) {
 
 function reportEnd(coordinate, shipName) {
     modalBtn.removeEventListener('click', controller);
-    modalText.textContent = `${game.players.at(game.playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
+    modalText.textContent = `${game.players.at(playerTurn).playerName} hit ${shipName} at ${coordinate} and has won the game!`
     modalBtn.textContent = 'Play Again';
     modalContainer.style.display = 'block';
     //Reset the game conditions
@@ -148,8 +143,8 @@ function displayPassDevice() {
         modalText.textContent = 'Pass the device';
         modalBtn.textContent = 'Done';
         modalContainer.style.display = 'block';
-        if (game.players.at(game.playerTurn).isFirstTurn === true) {
-            game.players.at(game.playerTurn).isFirstTurn = false;
+        if (game.players.at(playerTurn).isFirstTurn === true) {
+            game.players.at(playerTurn).isFirstTurn = false;
             modalBtn.addEventListener('click', promptGameplay);
         } else {
             modalBtn.addEventListener('click', controller);
