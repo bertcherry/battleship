@@ -322,7 +322,7 @@ function buildSetupPrompts() {
                             if(xOptions.indexOf(firstCellId.slice(0,1)) > xOptions.indexOf(currentCellId.slice(0,1))) {
                                 const nextCellXIndex = xOptions.indexOf(currentCellId.slice(0,1)) - 1;
                                 if (nextCellXIndex < 0) {
-                                    //if the index of the letter is -1, go to interruptDrag
+                                    interruptDrag();
                                 } else {
                                     const nextCell = document.getElementById('self-' + xOptions.at(nextCellXIndex) + currentCellId.slice(1));
                                     listenNextCell(nextCell);
@@ -331,7 +331,7 @@ function buildSetupPrompts() {
                                 //if it increments, add a listener to the cell plus 1 index in the xOptions array
                                 const nextCellXIndex = xOptions.indexOf(currentCellId.slice(0,1)) + 1;
                                 if (nextCellXIndex > 6) {
-                                    //if the index of the letter is >6, go to interruptDrag
+                                    interruptDrag();
                                 } else {
                                     const nextCell = document.getElementById('self-' + xOptions.at(nextCellXIndex) + currentCellId.slice(1));
                                     listenNextCell(nextCell);
