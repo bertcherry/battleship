@@ -389,6 +389,9 @@ function buildSetupPrompts() {
                                 }
                                 currentPlayer = game.playerTwo;
                                 namePrompt(`Player Two's`);
+                            } else if (game.playerTwo.isComputer === true) {
+                                currentPlayer = game.playerTwo;
+                                generateShips();
                             } else {
                                 for (const cell of selfCells.children) {
                                     cell.setAttribute('draggable', 'false');
@@ -410,6 +413,72 @@ function buildSetupPrompts() {
             }
         }
     }
+
+    function generateShips() {
+        let s = 0;
+        let ship;
+        let shipLength;
+        let shipName;
+        generateEach();
+
+        function generateEach() {
+            let shipCoords = [];
+            ship = Object.entries(currentPlayer.playerArgs).at(s).at(0);
+            shipLength = ship.slice(-1);
+            shipName = ship.substring(0,ship.length - 1);
+
+            for (let i = 0; i < 1000; i++) {
+                const xOptions = 'abcdefg';
+                const xNum = Math.floor(Math.random() * xOptions.length);
+                const xCoord = xOptions[xNum];
+                const yCoord = Math.floor(Math.random() * xOptions.length);
+                const randomCoord = xCoord + yCoord;
+                if (currentPlayer.selfBoard.gameboard[randomCoord] !== undefined) {
+                    shipCoords.push(randomCoord);
+                    //generate a random number 0 or 1 to determine vertical or horizontal ship placement
+                    const direction = Math.floor(Math.random() * 1);
+                    if (direction === 0) {
+                        //take randomCoord and increase the yCoord of the string shipLength - 1 times
+                        for (let n = 1; n <= shipLength; n++) {
+                            const newY = yCoord + n;
+                            //if the yCoord of any becomes greater than 6, break the loop
+                            if (newY > 6) { break; } else {
+                                if (currentPlayer.selfBoard.gameboard[xCoord + newY] !== undefined) {
+                                    shipCoords.push(xCoord + newY);
+                                }
+                            }
+                        }
+                    } else {
+                        //take randomCoord and increase the xCoord of the string shipLength - 1 times
+                        for (let n = 1; n <= shipLength; n++) {
+                            const newXNum = xNum + n;
+                            //before converting to a letter and concatenating, if the xCoord pre-number becomes greate than 6, break
+                            if (newXNum > 6) { break; } else {
+                                if (currentPlayer.selfBoard.gameboard[xOptions[newXNum] + yCoord] !== undefined) {
+                                    shipCoords.push(xOptions[newXNum] + yCoord);
+                                }
+                            }
+                        }
+                    }
+                    if (shipCoords.length === shipLength) {
+                        break;
+                    }
+                    //check that the ship is the correct length based on previous test outs
+                    //if yes, place ship and go to the next ship by s++
+                }
+            }
+
+            const placedShip = currentPlayer.selfBoard.placeShip(`${shipName}`, shipCoords);
+            currentPlayer.selfBoard.gameboardShips.push(placedShip);
+            s++;
+            if (s < Object.entries(currentPlayer.playerArgs).length) {
+                generateEach();
+            } else {
+                promptGameplay();
+            }
+        }
+    }
+
     return { askGameMode }
 }
 
