@@ -171,7 +171,7 @@ function buildSetupPrompts() {
     const nameInput = document.createElement('input');
     
     function askGameMode() {
-        modalText.textContent = 'Welcome to battleship, a classic warfare strategy game. What mode do you want to play?'
+        modalText.textContent = 'Welcome to Battleship, a classic warfare strategy game. What mode do you want to play?'
         modalBtn.textContent = 'vs. Computer'
         modalBtnTwo.textContent = '2 Player';
         modal.appendChild(modalBtnTwo);
