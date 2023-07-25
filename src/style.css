@@ -28,6 +28,8 @@ body, html {
 h2 {
     text-align: center;
     color: var(--accent);
+    white-space: nowrap;
+    font-size: clamp(16px, 3vw, 36px);
 }
 
 #gameboards {
