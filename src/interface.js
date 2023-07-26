@@ -472,8 +472,6 @@ function buildSetupPrompts() {
             if (s < Object.entries(currentPlayer.playerArgs).length) {
                 generateEach();
             } else {
-                console.log(currentPlayer.selfBoard.gameboardShips);
-                console.log(currentPlayer.selfBoard.gameboard);
                 promptGameplay();
             }
         }
