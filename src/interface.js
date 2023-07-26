@@ -84,7 +84,7 @@ modalBtn.addEventListener('click', hideModal);
 
 //Controls modal action once game has started
 let playerTurn = 1;
-const controller = () => {
+function controller() {
     if (game.playerOneBoard.gameboardShips.every(item => item.ship.sunk === true) || game.playerTwoBoard.gameboardShips.every(item => item.ship.sunk === true)) {
         return;
     } else {
@@ -138,8 +138,8 @@ function reportEnd(coordinate, shipName) {
 
 function displayPassDevice() {
     modalBtn.removeEventListener('click', displayPassDevice);
-    clearBoard();
     if (game.playerTwo.isComputer === false) {
+        clearBoard();
         modalText.textContent = 'Pass the device';
         modalBtn.textContent = 'Done';
         modalContainer.style.display = 'block';
@@ -427,44 +427,42 @@ function buildSetupPrompts() {
             shipLength = ship.slice(-1);
             shipName = ship.substring(0,ship.length - 1);
 
-            for (let i = 0; i < 1000; i++) {
+            while (shipCoords.length < shipLength) {
+                shipCoords = [];
                 const xOptions = 'abcdefg';
                 const xNum = Math.floor(Math.random() * xOptions.length);
                 const xCoord = xOptions[xNum];
                 const yCoord = Math.floor(Math.random() * xOptions.length);
                 const randomCoord = xCoord + yCoord;
-                if (currentPlayer.selfBoard.gameboard[randomCoord] !== undefined) {
+                if (!currentPlayer.selfBoard.gameboard[randomCoord]) {
                     shipCoords.push(randomCoord);
                     //generate a random number 0 or 1 to determine vertical or horizontal ship placement
-                    const direction = Math.floor(Math.random() * 1);
+                    const direction = Math.floor(Math.random() * 2);
                     if (direction === 0) {
                         //take randomCoord and increase the yCoord of the string shipLength - 1 times
-                        for (let n = 1; n <= shipLength; n++) {
-                            const newY = yCoord + n;
+                        for (let n = 0; n < (shipLength - 1); n++) {
+                            const newY = yCoord + (n + 1);
                             //if the yCoord of any becomes greater than 6, break the loop
                             if (newY > 6) { break; } else {
-                                if (currentPlayer.selfBoard.gameboard[xCoord + newY] !== undefined) {
-                                    shipCoords.push(xCoord + newY);
+                                const newCoord = xCoord + newY;
+                                if (!currentPlayer.selfBoard.gameboard[newCoord]) {
+                                    shipCoords.push(newCoord);
                                 }
                             }
                         }
                     } else {
                         //take randomCoord and increase the xCoord of the string shipLength - 1 times
-                        for (let n = 1; n <= shipLength; n++) {
-                            const newXNum = xNum + n;
+                        for (let n = 0; n < (shipLength - 1); n++) {
+                            const newXNum = xNum + (n + 1);
                             //before converting to a letter and concatenating, if the xCoord pre-number becomes greate than 6, break
                             if (newXNum > 6) { break; } else {
-                                if (currentPlayer.selfBoard.gameboard[xOptions[newXNum] + yCoord] !== undefined) {
-                                    shipCoords.push(xOptions[newXNum] + yCoord);
+                                const newCoord = xOptions[newXNum] + yCoord;
+                                if (!currentPlayer.selfBoard.gameboard[newCoord]) {
+                                    shipCoords.push(newCoord);
                                 }
                             }
                         }
                     }
-                    if (shipCoords.length === shipLength) {
-                        break;
-                    }
-                    //check that the ship is the correct length based on previous test outs
-                    //if yes, place ship and go to the next ship by s++
                 }
             }
 
@@ -474,6 +472,8 @@ function buildSetupPrompts() {
             if (s < Object.entries(currentPlayer.playerArgs).length) {
                 generateEach();
             } else {
+                console.log(currentPlayer.selfBoard.gameboardShips);
+                console.log(currentPlayer.selfBoard.gameboard);
                 promptGameplay();
             }
         }
