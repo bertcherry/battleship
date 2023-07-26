@@ -93,7 +93,13 @@ function controller() {
         } else {
             playerTurn = 0;
         }
-        game.players.at(playerTurn).controlTurn();
+
+        if (game.players.at(playerTurn).isComputer === true) {
+            game.players.at(playerTurn).attack(game.players.at(playerTurn).generateAttack());
+            game.players.at(playerTurn).populatePlayerBoard.markAttacks('self', game.players.at(playerTurn).enemyBoard);
+        } else {
+            game.players.at(playerTurn).populatePlayerBoard.intializeBoard();
+        }
     }
 }
 
@@ -187,6 +193,7 @@ function buildSetupPrompts() {
         currentPlayer = game.playerOne;
         if (e.currentTarget.id === 'modal-btn') {
             game.playerTwo.isComputer = true;
+            game.playerTwo.playerName = 'The Computer';
             playerDisplay = 'your';
         } else {
             playerDisplay = `Player One's`;
