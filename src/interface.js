@@ -308,7 +308,7 @@ function buildSetupPrompts() {
                             if (firstCellId.slice(1) > currentCellId.slice(1)) {
                                 const nextCellY = parseInt(currentCellId.slice(1)) - 1;
                                 if (nextCellY < 0) {
-                                    //if that's a negative number, go to the interruptDrag function that reports ship won't fit there
+                                    interruptDrag();
                                 } else {
                                     const nextCell = document.getElementById('self-' + currentCellId.slice(0,1) + nextCellY);
                                     listenNextCell(nextCell);
@@ -317,7 +317,7 @@ function buildSetupPrompts() {
                                 //if it increments, add a listener to the cell plus one
                                 const nextCellY = parseInt(currentCellId.slice(1)) + 1;
                                 if (nextCellY > 6) {
-                                    //if that's greater than 6, go to interruptDrag
+                                    interruptDrag();
                                 } else {
                                     const nextCell = document.getElementById('self-' + currentCellId.slice(0,1) + nextCellY);
                                     listenNextCell(nextCell);
