@@ -15,13 +15,6 @@ const createGameboard = () => {
         return createShip(name, length);
     }
 
-    //const carrier = placeShip('carrier', ...playerArgs.carrier5);
-    //const battleship = placeShip('battleship', ...playerArgs.battleship4);
-    //const destroyer = placeShip('destroyer', ...playerArgs.destroyer3);
-    //const submarine = placeShip('submarine', ...playerArgs.submarine3);
-    //const patrolBoat = placeShip('patrol boat', ...playerArgs.patrolBoat2);
-    //gameboardShips.push(carrier, battleship, destroyer, submarine, patrolBoat);
-
     const allSunk = (coordinate, shipName) => {
         if (gameboardShips.every(item => item.ship.sunk === true)) {
             reportEnd(coordinate, shipName);
