@@ -23,6 +23,7 @@ body, html {
     --empty: #686868;
     --ship: rgba(16,142,0, .5);
     --sunk: rgba(255, 0, 0, .5);
+    --hit: #ff0000;
 }
 
 h2 {
@@ -126,6 +127,18 @@ h2 {
     border: solid 3px var(--accent);
     color: var(--contrast);
     background-color: var(--bg);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+input:invalid {
+    border: solid 2px var(--hit);
 }
 
 #modal-text {

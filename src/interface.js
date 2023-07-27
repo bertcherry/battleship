@@ -174,7 +174,9 @@ function buildSetupPrompts() {
     let currentPlayer;
     const modal = document.getElementById('modal');
     const modalBtnTwo = document.createElement('button');
+    const nameForm = document.createElement('form');
     const nameInput = document.createElement('input');
+    nameInput.setAttribute('required', '');
     
     function askGameMode() {
         modalText.textContent = 'Welcome to Battleship, a classic warfare strategy game. What mode do you want to play?'
@@ -205,10 +207,11 @@ function buildSetupPrompts() {
 
     //Prompt for player name for each human player
     function namePrompt(player) {
-        modalText.textContent = `Enter ${player} name`
-        modalBtn.textContent = 'Submit'
-        modal.appendChild(nameInput);
-        modal.appendChild(modalBtn);
+        modalText.textContent = `Enter ${player} name (required)`;
+        modalBtn.textContent = 'Submit';
+        modal.appendChild(nameForm);
+        nameForm.appendChild(nameInput);
+        nameForm.appendChild(modalBtn);
         modalContainer.style.display = 'block';
         modalBtn.addEventListener('click', storePlayerName);
     }
@@ -218,7 +221,8 @@ function buildSetupPrompts() {
         e.preventDefault();
         currentPlayer.playerName = nameInput.value;
         nameInput.value = '';
-        modal.removeChild(nameInput);
+        modal.removeChild(nameForm);
+        modal.appendChild(modalBtn);
         promptPlaceShips();
     } 
 
