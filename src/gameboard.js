@@ -5,6 +5,7 @@ const createGameboard = () => {
     let gameboard = {};
     let gameboardShips = [];
     let shotList = [];
+    let lastHit;
 
     const placeShip = (name, coordinates) => {
         const length = coordinates.length;
@@ -37,14 +38,19 @@ const createGameboard = () => {
             const hitShip = gameboardShips.find(item => item.ship.name === gameboard[coordinate]);
             hitShip.hit();
             if (hitShip.ship.sunk === true) {
+                lastHit = undefined;
                 allSunk(coordinate, hitShip.ship.name);
+                return lastHit;
             } else {
+                lastHit = coordinate;
                 reportHit(coordinate);
             }
         }
     }
 
-    return { placeShip, receiveAttack, allSunk, gameboard, gameboardShips, shotList };
+    const getLastHit = () => lastHit;
+
+    return { placeShip, receiveAttack, allSunk, gameboard, gameboardShips, shotList, getLastHit };
 }   
 
 export { createGameboard };
